@@ -49,8 +49,8 @@ if ! test -d .mygive/"$ass_name"/"$zid";then
     mkdir .mygive/"$ass_name"/"$zid"/"1"
     cp "$file_name" .mygive/"$ass_name"/"$zid"/"1"  && date "+%a %b %e %T %Y" > ".mygive/""$ass_name""/""$zid""/"1"/.timestamp"
     time_stamp=$(date "+%a %b %e %T %Y")
-    #file_size=$(stat -c%s "$file_name")
-    file_size=$(stat -f"%z" "$file_name")
+    file_size=$(stat -c%s "$file_name")
+    #file_size=$(stat -f"%z" "$file_name")
     echo "Submission accepted - submission $max_index: $file_name $file_size bytes @ $time_stamp"
     exit 0
 fi
@@ -58,8 +58,8 @@ fi
 mkdir ".mygive/$ass_name/$zid/$max_index"
 cp "$file_name" ".mygive/$ass_name/$zid/$max_index/" && date "+%a %b %e %T %Y" > ".mygive/$ass_name/$zid/$max_index/.timestamp"
 time_stamp=$(date "+%a %b %e %T %Y")
-#file_size=$(stat -c%s "$file_name")
-file_size=$(stat -f"%z" "$file_name")
+file_size=$(stat -c%s "$file_name")
+#file_size=$(stat -f"%z" "$file_name")
 
 echo "Submission accepted - submission $max_index: $file_name $file_size bytes @ $time_stamp"
 

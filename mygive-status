@@ -18,8 +18,8 @@ for ass in .mygive/*;do
                 submission_num=$(basename $submission)
                 submission_time=$(cat "$submission/.timestamp")
                 file_name=$(find "$submission" -maxdepth 1 -type f ! -name "*.timestamp" -print0 | xargs -0 -n1 basename)
-                #file_size=$(stat -c%s "$file_name")
-                file_size=$(stat -f"%z" "$file_name")  
+                file_size=$(stat -c%s "$file_name")
+                #file_size=$(stat -f"%z" "$file_name")  
                 echo "submission $submission_num: $file_name $file_size bytes @ $submission_time"
                 found_submission=true
             fi
