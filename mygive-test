@@ -69,13 +69,13 @@ for test_file in .mygive/$ass_name/tests/*; do
             options=$(cat "./$file_dir/options")
         fi
 
-        echo "arguments: $arguments"
-        echo "stdin: $stdin"
-        echo "stdout: $stdout"
-        echo "stderr: $stderr"
+        # echo "arguments: $arguments"
+        # echo "stdin: $stdin"
+        # echo "stdout: $stdout"
+        # echo "stderr: $stderr"
 
         result=$(echo "$stdin" | ./"$program_file" $arguments)
-        echo "result: $result"
+        # echo "result: $result"
 
         if echo "$options" | grep -q "b"; then
             result=$(echo "$result" | sed "/^$/d")

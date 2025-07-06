@@ -3,7 +3,7 @@
 ass_name=$1
 test_files=$2
 
-ass_regex="^[a-z][a-zA-Z0-9]*$"
+ass_regex="^[a-z][a-zA-Z0-9_]*$"
 test_regex="^[a-zA-Z0-9._/\-]+$"
 
 if test $# != 2; then
