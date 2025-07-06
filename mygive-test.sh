@@ -62,16 +62,17 @@ for test_file in .mygive/$ass_name/tests/*; do
         fi
 
         if [ -f "./$file_dir/stderr" ];then
-            stdout=$(cat "./$file_dir/stderr")
+            stderr=$(cat "./$file_dir/stderr")
         fi
 
         if [ -f "./$file_dir/options" ];then
-            stdout=$(cat "./$file_dir/options")
+            options=$(cat "./$file_dir/options")
         fi
 
         echo "arguments: $arguments"
         echo "stdin: $stdin"
         echo "stdout: $stdout"
+        echo "stderr: $stderr"
 
         result=$(echo "$stdin" | ./"$program_file" $arguments)
         echo "result: $result"
