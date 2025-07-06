@@ -1,0 +1,56 @@
+#!/bin/dash
+
+ass_name=$1
+zid=$2
+file_name=$3
+
+test_regex="^[a-zA-Z0-9._/\-]+$"
+
+if [ ! -d ".mygive/$ass_name/$zid" ];then
+    mkdir ".mygive/$ass_name/$zid"
+fi
+
+if ! echo "$zid" | grep -qE '^z[0-9]{7}$';then
+    echo "mygive-submit: invalid zid: $zid" 1>&2
+    exit 1
+fi
+
+if ! echo "$file_name" | grep -Eq "$test_regex";then
+    echo "test file is invalid" 1>&2
+    exit 1
+fi
+
+if ! test -f "$file_name";then
+    echo "mygive-submit: $file_name: No such file or directory" 1>&2
+    exit 1
+fi
+
+max_index=$( ls -1d ".mygive/$ass_name/$zid/"* 2>/dev/null | sed 's/.*\///' | sort | tail -n1)
+#echo "max index: $max_index"
+
+if [ -z "$max_index" ];then
+    max_index=1
+else
+    max_index=$((max_index+1))
+fi
+
+if ! test -d .mygive/"$ass_name"/"$zid";then
+    mkdir .mygive/"$ass_name"/"$zid"
+    mkdir .mygive/"$ass_name"/"$zid"/"1"
+    cp "$file_name" .mygive/"$ass_name"/"$zid"/"1"  && date "+%a %b %e %T %Y" > ".mygive/""$ass_name""/""$zid""/"1"/.timestamp"
+    time_stamp=$(date "+%a %b %e %T %Y")
+    #file_size=$(stat -c%s "$file_name")
+    file_size=$(stat -f"%z" "$file_name")
+    echo "Submission accepted - submission $max_index: $file_name $file_size bytes @ $time_stamp"
+    exit 0
+fi
+
+mkdir ".mygive/$ass_name/$zid/$max_index"
+cp "$file_name" ".mygive/$ass_name/$zid/$max_index/" && date "+%a %b %e %T %Y" > ".mygive/$ass_name/$zid/$max_index/.timestamp"
+time_stamp=$(date "+%a %b %e %T %Y")
+#file_size=$(stat -c%s "$file_name")
+file_size=$(stat -f"%z" "$file_name")
+
+echo "Submission accepted - submission $max_index: $file_name $file_size bytes @ $time_stamp"
+
+exit 0

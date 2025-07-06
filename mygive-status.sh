@@ -1,0 +1,32 @@
+#!/bin/dash
+
+zid=$1
+found_submission=false
+
+if ! echo "$zid" | grep -qE '^z[0-9]{7}$';then
+    echo "mygive-status: invalid zid: $zid" 1>&2
+    exit 1
+fi
+
+for ass in .mygive/*;do
+    if [ -d "$ass/$zid" ];then
+        ass_name=$(basename $ass)
+        submission_total=$(ls -1d "$ass/$zid"/* 2>/dev/null | wc -l | tr -d " ")
+        echo "* $submission_total submissions for $ass_name"
+        for submission in "$ass/$zid"/*;do
+            if  [ -d "$submission" ];then
+                submission_num=$(basename $submission)
+                submission_time=$(cat "$submission/.timestamp")
+                file_name=$(find "$submission" -maxdepth 1 -type f ! -name "*.timestamp" -print0 | xargs -0 -n1 basename)
+                #file_size=$(stat -c%s "$file_name")
+                file_size=$(stat -f"%z" "$file_name")  
+                echo "submission $submission_num: $file_name $file_size bytes @ $submission_time"
+                found_submission=true
+            fi
+        done
+    fi
+done
+
+if [ "$found_submission" = false ];then
+    echo "no submissions for $zid"
+fi
