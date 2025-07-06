@@ -11,13 +11,18 @@ if ! test -d ".mygive/$ass_name"; then
     exit 1
 fi
 
+if test $# != 3; then
+    echo "usage: mygive-submit <assignment> <zid> <filename>" >&2
+    exit 1
+fi 
+
 if ! echo "$zid" | grep -qE '^z[0-9]{7}$';then
     echo "mygive-submit: invalid zid: $zid" 1>&2
     exit 1
 fi
 
 if ! echo "$file_name" | grep -Eq "$test_regex";then
-    echo "test file is invalid" 1>&2
+    echo "mygive-submit: invalid file: $file_name" 1>&2
     exit 1
 fi
 
@@ -25,11 +30,6 @@ if ! test -f "$file_name";then
     echo "mygive-submit: $file_name: No such file or directory" 1>&2
     exit 1
 fi
-
-if test $# != 3; then
-    echo "usage: mygive-submit <assignment> <zid> <filename>" >&2
-    exit 1
-fi 
 
 if [ ! -d ".mygive/$ass_name/$zid" ];then
     mkdir ".mygive/$ass_name/$zid"
