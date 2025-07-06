@@ -12,7 +12,7 @@ if test $# != 2; then
 fi 
 
 if ! echo "$ass_name" | grep -Eq "$ass_regex";then
-    echo "ass name is invalid" 1>&2
+    echo "mygive-add: invalid assignment: $ass_name" 1>&2
     exit 1
 fi
 

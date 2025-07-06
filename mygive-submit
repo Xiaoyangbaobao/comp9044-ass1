@@ -6,7 +6,7 @@ file_name=$3
 
 test_regex="^[a-zA-Z0-9._/\-]+$"
 
-if ! test -d ".take/$ass_name"; then
+if ! test -d ".mygive/$ass_name"; then
     echo "mygive-submit: assignment $ass_name not found" 1>&2
     exit 1
 fi
