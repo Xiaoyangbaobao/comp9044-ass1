@@ -1,12 +1,28 @@
 #!/bin/dash
 
 ass=$1
-ass_regex="^[a-z][a-zA-Z0-9]*$"
+ass_regex="^[a-z][a-zA-Z0-9_]*$"
 
-if ! echo "$ass_name" | grep -Eq "$ass_regex";then
+if test $# != 1; then
+    echo "usage: mygive-rm <assignment>" 1>&2
+    exit 1
+fi
+
+if ! test -d ".mygive"; then
+    echo "mygive-rm: take directory .mygive not found" 1>&2
+    exit 1
+fi
+
+if ! echo "$ass" | grep -Eq "$ass_regex";then
     echo "mygive-rm: invalid assignment: $ass" 1>&2
+    exit 1
+fi
+
+if ! test -d ".mygive/$ass"; then
+    echo "take-submit: assignment $ass not found" 1>&2
     exit 1
 fi
 
 rm -rf "./mygive/$ass"
 echo "assignment $ass removed"
+exit 0
