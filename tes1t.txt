@@ -32,17 +32,17 @@ Did you mean:
                 file_name=$(basename "$file_dir")
 
 
-In mygive-mark line 66:
+In mygive-mark line 67:
                     if ! echo "$arguments" | grep -Eq "$arguments_regex";then
                                                        ^--------------^ SC2154 (warning): arguments_regex is referenced but not assigned.
 
 
-In mygive-mark line 81:
+In mygive-mark line 82:
                     stderr=$(cat "./$file_dir/stderr")
                     ^----^ SC2034 (warning): stderr appears unused. Verify use (or export if used externally).
 
 
-In mygive-mark line 88:
+In mygive-mark line 99:
                 result=$(echo "$stdin" | "$program_file" $arguments)
                                                          ^--------^ SC2086 (info): Double quote to prevent globbing and word splitting.
 
@@ -50,17 +50,12 @@ Did you mean:
                 result=$(echo "$stdin" | "$program_file" "$arguments")
 
 
-In mygive-mark line 89:
-                total_marks=$((total_marks+marks))
-                                           ^---^ SC2154 (warning): marks is referenced but not assigned.
-
-
-In mygive-mark line 118:
+In mygive-mark line 131:
                     if [ ! -n "$stdout" ];then
                          ^-- SC2236 (style): Use -z instead of ! -n.
 
 
-In mygive-mark line 122:
+In mygive-mark line 135:
                     elif [ ! -n "$result" ];then
                            ^-- SC2236 (style): Use -z instead of ! -n.
 
@@ -161,7 +156,7 @@ assignment lab2 created
 no submissions for z1234567
 Submission accepted - submission 1: multiply_wrong.sh 48 bytes @ Sun Dec  5 20:42:50 1999
 Student z1234567 - submission 1: multiply_wrong.sh 48 bytes @ Sun Dec  5 20:42:50 1999
-* Test marking1 passed ( marks).
+* Test marking1 passed (10 marks).
 * Test marking2 failed.
 --- Incorrect stdout of 3 bytes:
 16
@@ -176,15 +171,15 @@ Student z1234567 - submission 1: multiply_wrong.sh 48 bytes @ Sun Dec  5 20:42:5
 --- Correct stdout is these 3 bytes:
 12
 
-* Test marking4 passed ( marks).
-** 2 tests passed, 2 tests failed - mark: 0/0
+* Test marking4 passed (42 marks).
+** 2 tests passed, 2 tests failed - mark: 52/102
 Submission accepted - submission 2: multiply_right.py 78 bytes @ Sun Dec  5 20:44:35 1999
 Student z1234567 - submission 2: multiply_right.py 78 bytes @ Sun Dec  5 20:44:35 1999
-* Test marking1 passed ( marks).
-* Test marking2 passed ( marks).
-* Test marking3 passed ( marks).
-* Test marking4 passed ( marks).
-** 4 tests passed, 0 tests failed - mark: 0/0
+* Test marking1 passed (10 marks).
+* Test marking2 passed (30 marks).
+* Test marking3 passed (20 marks).
+* Test marking4 passed (42 marks).
+** 4 tests passed, 0 tests failed - mark: 102/102
 
 The correct 29 lines of output for this test were:
 directory .mygive created
@@ -224,46 +219,12 @@ The difference between your output(-) and the correct output(+) is:
 + *** Student z1234567 - submission 1: multiply_wrong.sh 48 bytes @ Sun Dec  5 20:42:50 1999
 ? ++++
 
-- * Test marking1 passed ( marks).
-+ * Test marking1 passed (10 marks).
-?                         ++
-
-  
-- * Test marking4 passed ( marks).
-+ * Test marking4 passed (42 marks).
-?                         ++
-
-- ** 2 tests passed, 2 tests failed - mark: 0/0
-?                                            ^^
-
-+ ** 2 tests passed, 2 tests failed - mark: 52/102
-?                                           ++++ ^
-
   Submission accepted - submission 2: multiply_right.py 78 bytes @ Sun Dec  5 20:44:35 1999
 - Student z1234567 - submission 2: multiply_right.py 78 bytes @ Sun Dec  5 20:44:35 1999
 + *** Student z1234567 - submission 2: multiply_right.py 78 bytes @ Sun Dec  5 20:44:35 1999
 ? ++++
 
-- * Test marking1 passed ( marks).
-+ * Test marking1 passed (10 marks).
-?                         ++
-
-- * Test marking2 passed ( marks).
-+ * Test marking2 passed (30 marks).
-?                         ++
-
-- * Test marking3 passed ( marks).
-+ * Test marking3 passed (20 marks).
-?                         ++
-
-- * Test marking4 passed ( marks).
-+ * Test marking4 passed (42 marks).
-?                         ++
-
-- ** 4 tests passed, 0 tests failed - mark: 0/0
-+ ** 4 tests passed, 0 tests failed - mark: 102/102
-?                                           + + + +
-
+...
 You can reproduce this test by executing these commands:
   rm -rf .mygive
   mygive-add lab2 multiply.tests
@@ -765,7 +726,7 @@ The
 
 answer is  42
 
-* Test default_marking passed ( marks).
+* Test default_marking passed (1 marks).
 * Test ignore_bcw_marking failed.
 --- Incorrect stdout of 15 bytes:
 the
@@ -1156,7 +1117,7 @@ assignment test1 created
 Submission accepted - submission 1: grep.sh 22 bytes @ Sun Apr 13 13:47:33 2003
 Submission accepted - submission 1: grep_wrong.sh 20 bytes @ Sun Apr 13 13:48:23 2003
 Student z6666666 - submission 1: grep_wrong.sh 20 bytes @ Sun Apr 13 13:48:23 2003
-* Test label1_marking passed ( marks).
+* Test label1_marking passed (13 marks).
 * Test label2_marking failed.
 --- Incorrect stdout of 2 bytes:
 3
@@ -1164,11 +1125,11 @@ Student z6666666 - submission 1: grep_wrong.sh 20 bytes @ Sun Apr 13 13:48:23 20
 --- Correct stdout is these 2 bytes:
 4
 
-** 1 tests passed, 1 tests failed - mark: 0/0
+** 1 tests passed, 1 tests failed - mark: 13/30
 Student z5555555 - submission 1: grep.sh 22 bytes @ Sun Apr 13 13:47:33 2003
-* Test label1_marking passed ( marks).
-* Test label2_marking passed ( marks).
-** 2 tests passed, 0 tests failed - mark: 0/0
+* Test label1_marking passed (13 marks).
+* Test label2_marking passed (17 marks).
+** 2 tests passed, 0 tests failed - mark: 30/30
 
 The correct 30 lines of output for this test were:
 directory .mygive created
@@ -1213,21 +1174,11 @@ The difference between your output(-) and the correct output(+) is:
 + *** Student z6666666 - submission 1: grep_wrong.sh 20 bytes @ Sun Apr 13 13:48:23 2003
 ? ++++
 
-- * Test label1_marking passed ( marks).
-+ * Test label1_marking passed (13 marks).
-?                               ++
-
-  
-- ** 1 tests passed, 1 tests failed - mark: 0/0
-?                                            --
-
-+ ** 1 tests passed, 1 tests failed - mark: 13/30
-?                                           ++++
-
+  ** 1 tests passed, 1 tests failed - mark: 13/30
 - Student z5555555 - submission 1: grep.sh 22 bytes @ Sun Apr 13 13:47:33 2003
-- * Test label1_marking passed ( marks).
-- * Test label2_marking passed ( marks).
-- ** 2 tests passed, 0 tests failed - mark: 0/0
+- * Test label1_marking passed (13 marks).
+- * Test label2_marking passed (17 marks).
+- ** 2 tests passed, 0 tests failed - mark: 30/30
 You can reproduce this test by executing these commands:
   rm -rf .mygive
   mygive-add test1 grep.tests
