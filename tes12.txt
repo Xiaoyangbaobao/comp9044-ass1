@@ -3,7 +3,7 @@ check_hashbang.sh mygive-* # mygive-add
 check_features_used.sh mygive-* # mygive-add
 shellcheck -x -a -P='.' --shell=dash  -e2010,2011,2012,2038 mygive-*; true # mygive-add
 
-In mygive-mark line 33:
+In mygive-mark line 32:
     zid=$(basename $zid)
                    ^--^ SC2086 (info): Double quote to prevent globbing and word splitting.
 
@@ -11,12 +11,12 @@ Did you mean:
     zid=$(basename "$zid")
 
 
-In mygive-mark line 44:
+In mygive-mark line 43:
     for test_file in $base_dir/tests/*; do
                      ^-------^ SC2231 (info): Quote expansions in this for loop glob to prevent wordsplitting, e.g. "$dir"/*.txt .
 
 
-In mygive-mark line 45:
+In mygive-mark line 44:
         test_dir=$(basename $test_file | cut -d'.' -f1)
                             ^--------^ SC2086 (info): Double quote to prevent globbing and word splitting.
 
@@ -24,7 +24,7 @@ Did you mean:
         test_dir=$(basename "$test_file" | cut -d'.' -f1)
 
 
-In mygive-mark line 56:
+In mygive-mark line 55:
             file_name=$(basename $file_dir)
                                  ^-------^ SC2086 (info): Double quote to prevent globbing and word splitting.
 
@@ -32,27 +32,27 @@ Did you mean:
             file_name=$(basename "$file_dir")
 
 
-In mygive-mark line 59:
+In mygive-mark line 58:
                 stdout=""
                 ^----^ SC2034 (warning): stdout appears unused. Verify use (or export if used externally).
 
 
-In mygive-mark line 62:
+In mygive-mark line 61:
                 stderr=""
                 ^----^ SC2034 (warning): stderr appears unused. Verify use (or export if used externally).
 
 
-In mygive-mark line 68:
+In mygive-mark line 67:
                 expected_stderr_file=$(mktemp)
                 ^------------------^ SC2034 (warning): expected_stderr_file appears unused. Verify use (or export if used externally).
 
 
-In mygive-mark line 76:
+In mygive-mark line 75:
                     if ! echo "$arguments" | grep -Eq "$arguments_regex";then
                                                        ^--------------^ SC2154 (warning): arguments_regex is referenced but not assigned.
 
 
-In mygive-mark line 101:
+In mygive-mark line 100:
                     ./"$program_file" $arguments > "$result_stdout_file" 2> "$result_stderr_file"
                                       ^--------^ SC2086 (info): Double quote to prevent globbing and word splitting.
 
@@ -60,7 +60,7 @@ Did you mean:
                     ./"$program_file" "$arguments" > "$result_stdout_file" 2> "$result_stderr_file"
 
 
-In mygive-mark line 103:
+In mygive-mark line 102:
                     echo "$stdin" | ./"$program_file" $arguments > "$result_stdout_file" 2> "$result_stderr_file"
                                                       ^--------^ SC2086 (info): Double quote to prevent globbing and word splitting.
 
@@ -68,46 +68,18 @@ Did you mean:
                     echo "$stdin" | ./"$program_file" "$arguments" > "$result_stdout_file" 2> "$result_stderr_file"
 
 
-In mygive-mark line 116:
-                    cat "$result_stdout_file" | sed "/^$/d" > "$result_stdout_file"
-                        ^-------------------^ SC2094 (info): Make sure not to read and write the same file in the same pipeline.
-                        ^-------------------^ SC2002 (style): Useless cat. Consider 'cmd < file | ..' or 'cmd file | ..' instead.
-                                                              ^-------------------^ SC2094 (info): Make sure not to read and write the same file in the same pipeline.
-
-
-In mygive-mark line 120:
-                    cat "$result_stdout_file" | tr "[:upper:]" "[:lower:]" > "$result_stdout_file"
-                        ^-------------------^ SC2094 (info): Make sure not to read and write the same file in the same pipeline.
-                        ^-------------------^ SC2002 (style): Useless cat. Consider 'cmd < file | ..' or 'cmd file | ..' instead.
-                                                                             ^-------------------^ SC2094 (info): Make sure not to read and write the same file in the same pipeline.
-
-
-In mygive-mark line 124:
-                cat "$result_stdout_file" | tr -d ' \t' > "$result_stdout_file"
-                    ^-------------------^ SC2094 (info): Make sure not to read and write the same file in the same pipeline.
-                    ^-------------------^ SC2002 (style): Useless cat. Consider 'cmd < file | ..' or 'cmd file | ..' instead.
-                                                          ^-------------------^ SC2094 (info): Make sure not to read and write the same file in the same pipeline.
-
-
-In mygive-mark line 128:
-                    cat "$result_stdout_file" | sed 's/[^0-9\n]//g' > "$result_stdout_file"
-                        ^-------------------^ SC2094 (info): Make sure not to read and write the same file in the same pipeline.
-                        ^-------------------^ SC2002 (style): Useless cat. Consider 'cmd < file | ..' or 'cmd file | ..' instead.
-                                                                      ^-------------------^ SC2094 (info): Make sure not to read and write the same file in the same pipeline.
-
-
-In mygive-mark line 133:
+In mygive-mark line 140:
                 if [ $? -eq 0 ];then
                      ^-- SC2181 (style): Check exit code directly with e.g. 'if mycmd;', not indirectly with $?.
 
 
-In mygive-mark line 157:
+In mygive-mark line 164:
                     elif [ $(($result_size - $expected_result_size)) -eq 1 ] && [ "$result_char_result" = "" ];then
                               ^----------^ SC2004 (style): $/${} is unnecessary on arithmetic variables.
                                              ^-------------------^ SC2004 (style): $/${} is unnecessary on arithmetic variables.
 
 
-In mygive-mark line 172:
+In mygive-mark line 179:
                     elif [ $(($expected_result_size - $result_size)) -eq 1 ] && [ "$expected_char_result" = "" ];then
                               ^-------------------^ SC2004 (style): $/${} is unnecessary on arithmetic variables.
                                                       ^----------^ SC2004 (style): $/${} is unnecessary on arithmetic variables.
@@ -186,46 +158,18 @@ Did you mean:
             echo "$stdin" | ./"$program_file" "$arguments" > "$result_stdout_file" 2> "$result_stderr_file"
 
 
-In mygive-test line 96:
-            cat "$result_stdout_file" | sed "/^$/d" > "$result_stdout_file"
-                ^-------------------^ SC2094 (info): Make sure not to read and write the same file in the same pipeline.
-                ^-------------------^ SC2002 (style): Useless cat. Consider 'cmd < file | ..' or 'cmd file | ..' instead.
-                                                      ^-------------------^ SC2094 (info): Make sure not to read and write the same file in the same pipeline.
-
-
-In mygive-test line 100:
-            cat "$result_stdout_file" | tr "[:upper:]" "[:lower:]" > "$result_stdout_file"
-                ^-------------------^ SC2094 (info): Make sure not to read and write the same file in the same pipeline.
-                ^-------------------^ SC2002 (style): Useless cat. Consider 'cmd < file | ..' or 'cmd file | ..' instead.
-                                                                     ^-------------------^ SC2094 (info): Make sure not to read and write the same file in the same pipeline.
-
-
-In mygive-test line 104:
-           cat "$result_stdout_file" | tr -d ' \t' > "$result_stdout_file"
-               ^-------------------^ SC2094 (info): Make sure not to read and write the same file in the same pipeline.
-               ^-------------------^ SC2002 (style): Useless cat. Consider 'cmd < file | ..' or 'cmd file | ..' instead.
-                                                     ^-------------------^ SC2094 (info): Make sure not to read and write the same file in the same pipeline.
-
-
-In mygive-test line 108:
-            cat "$result_stdout_file" | sed 's/[^0-9\n]//g' > "$result_stdout_file"
-                ^-------------------^ SC2094 (info): Make sure not to read and write the same file in the same pipeline.
-                ^-------------------^ SC2002 (style): Useless cat. Consider 'cmd < file | ..' or 'cmd file | ..' instead.
-                                                              ^-------------------^ SC2094 (info): Make sure not to read and write the same file in the same pipeline.
-
-
-In mygive-test line 113:
+In mygive-test line 122:
         if [ $? -eq 0 ];then
              ^-- SC2181 (style): Check exit code directly with e.g. 'if mycmd;', not indirectly with $?.
 
 
-In mygive-test line 136:
+In mygive-test line 145:
             elif [ $(($result_size - $expected_result_size)) -eq 1 ] && [ "$result_char_result" = "" ];then
                       ^----------^ SC2004 (style): $/${} is unnecessary on arithmetic variables.
                                      ^-------------------^ SC2004 (style): $/${} is unnecessary on arithmetic variables.
 
 
-In mygive-test line 151:
+In mygive-test line 160:
             elif [ $(($expected_result_size - $result_size)) -eq 1 ] && [ "$expected_char_result" = "" ];then
                       ^-------------------^ SC2004 (style): $/${} is unnecessary on arithmetic variables.
                                               ^----------^ SC2004 (style): $/${} is unnecessary on arithmetic variables.
@@ -248,130 +192,399 @@ Test 11_fetch (fetch) - passed
 Test 12_fetch (fetch - no submission number) - passed
 Test 13_fetch (fetch - negative submission number) - passed
 Test 14_fetch (fetch error) - passed
-Test 15_test (test) - failed (errors)
-Your program produced these errors:
-./mygive-test: 136: arithmetic expression: expecting EOF: "3 - 2025-07-08 02:05:17.152522593 +1000s"
-You can reproduce this test by executing these commands:
-  rm -rf .mygive
-  mygive-add multiply_exercise multiply.tests
-mygive-test multiply_exercise multiply_right.py
-mygive-test multiply_exercise multiply_wrong.sh
+Test 15_test (test) - passed
 Test 16_test (test: argument error handling) - passed
-Test 17_mark (mark 1 assignment) - failed (errors)
-Your program produced these errors:
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-./mygive-mark: 157: arithmetic expression: expecting primary: " - "
-You can reproduce this test by executing these commands:
-  rm -rf .mygive
-  mygive-add lab2 multiply.tests
-FAKETIME="1999-12-05 20:41:48" mygive-status z1234567
-FAKETIME="1999-12-05 20:42:50" mygive-submit lab2 z1234567 multiply_wrong.sh
-FAKETIME="1999-12-05 20:44:00" mygive-mark lab2
-FAKETIME="1999-12-05 20:44:35" mygive-submit lab2 z1234567 multiply_right.py
-FAKETIME="1999-12-05 20:46:07" mygive-mark lab2
+Test 17_mark (mark 1 assignment) - passed
 Test 18_summary (rm) - passed
 Test 19_summary (add,rm,add) - passed
-Test 20_mark (test newline handling) - failed (errors)
-Your program produced these errors:
-stat: cannot statx './hello/four_newlines/stdin': No such file or directory
-./mygive-test: 136: arithmetic expression: expecting primary: "34 - "
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-./mygive-mark: 157: arithmetic expression: expecting primary: " - "
-You can reproduce this test by executing these commands:
-  rm -rf .mygive
-  mygive-add hello hello.tests
-mygive-test hello hello.sh
-mygive-test hello hello_wrong0.sh
-FAKETIME="1994-09-16 11:51:06" mygive-submit hello z5000000 hello.sh
-FAKETIME="1994-09-16 11:51:15" mygive-submit hello z6000000 hello_wrong0.sh
-FAKETIME="1994-09-16 11:53:11" mygive-mark hello
-Test 21_mark (test option handling) - failed (errors)
-Your program produced these errors:
-stat: cannot statx './answer/ignore_bcw/stdin': No such file or directory
-stat: cannot statx './answer/ignore_blank_lines/stdin': No such file or directory
-stat: cannot statx './answer/ignore_case/stdin': No such file or directory
-stat: cannot statx './answer/ignore_digits/stdin': No such file or directory
-stat: cannot statx './answer/ignore_whitespace/stdin': No such file or directory
-stat: cannot statx './answer/check_bcw/stdin': No such file or directory
-./mygive-test: 136: arithmetic expression: expecting primary: "19 - "
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-./mygive-mark: 157: arithmetic expression: expecting primary: " - "
-You can reproduce this test by executing these commands:
-  rm -rf .mygive
-  mygive-add answer answer.tests
-mygive-test answer answer.sh
-mygive-test answer answer_wrong.sh
-FAKETIME="2050-06-06 13:36:48" mygive-submit answer z1234567 answer.sh
-FAKETIME="2050-06-06 13:38:24" mygive-submit answer z7654321 answer_wrong.sh
-FAKETIME="2050-06-06 13:38:30" mygive-mark answer
-Test 22_mark (test stdin & argument handling handling) - failed (errors)
-Your program produced these errors:
-./mygive-test: 136: arithmetic expression: expecting EOF: "2 - 2025-07-08 02:05:19.616545866 +1000s"
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-./mygive-mark: 157: arithmetic expression: expecting primary: " - "
-You can reproduce this test by executing these commands:
-  rm -rf .mygive
-  mygive-add test1 grep.tests
-mygive-test test1 grep.sh
-mygive-test test1 grep_wrong.sh
-FAKETIME="2003-04-13 13:47:33" mygive-submit test1 z5555555 grep.sh
-FAKETIME="2003-04-13 13:48:23" mygive-submit test1 z6666666 grep_wrong.sh
-FAKETIME="2003-04-13 13:49:22" mygive-mark test1
-Test 23_test (test incorrect stderr & incorrect exit) - failed (errors)
-Your program produced these errors:
-stat: cannot statx './stderr/test2/stdin': No such file or directory
-./mygive-test: 136: arithmetic expression: expecting primary: "2 - "
+Test 20_mark (test newline handling) - passed
+Test 21_mark (test option handling) - passed
+Test 22_mark (test stdin & argument handling handling) - passed
+Test 23_test (test incorrect stderr & incorrect exit) - failed (Incorrect output)
+Your program produced these 26 lines of output:
+directory .mygive created
+assignment project created
+* Test test1 passed.
+* Test test2 failed.
+--- Incorrect stdout of 2 bytes:
+2
+
+--- Correct stdout is these 2 bytes:
+1
+
+* Test test3 failed.
+--- Incorrect stdout of 2 bytes:
+4
+
+--- Correct stdout is these 2 bytes:
+5
+
+* Test test4 failed.
+--- Incorrect stdout of 2 bytes:
+5
+
+--- Correct stdout is these 2 bytes:
+4
+
+* Test test5 passed.
+** 2 tests passed, 3 tests failed
+
+The correct 47 lines of output for this test were:
+directory .mygive created
+assignment project created
+* Test test1 passed.
+* Test test2 failed.
+--- Incorrect stdout of 2 bytes:
+2
+
+--- Correct stdout is these 2 bytes:
+1
+
+--- Incorrect stderr of 2 bytes:
+3
+
+--- Correct stderr is these 2 bytes:
+2
+
+Exit status of 1 incorrect should be 3
+* Test test3 failed.
+--- Incorrect stdout of 2 bytes:
+4
+
+--- Correct stdout is these 2 bytes:
+5
+
+Exit status of 5 incorrect should be 4
+* Test test4 failed.
+--- Incorrect stdout of 2 bytes:
+5
+
+--- Correct stdout is these 2 bytes:
+4
+
+--- Incorrect stderr of 2 bytes:
+4
+
+--- Correct stderr is these 2 bytes:
+5
+
+* Test test5 failed.
+--- Incorrect stderr of 2 bytes:
+5
+
+--- Correct stderr is these 2 bytes:
+4
+
+Exit status of 4 incorrect should be 5
+** 1 tests passed, 4 tests failed
+
+The difference between your output(-) and the correct output(+) is:
+...
++ --- Incorrect stderr of 2 bytes:
++ 3
++ 
++ --- Correct stderr is these 2 bytes:
++ 2
++ 
++ Exit status of 1 incorrect should be 3
+  * Test test3 failed.
+  
++ Exit status of 5 incorrect should be 4
+  * Test test4 failed.
+  
++ --- Incorrect stderr of 2 bytes:
++ 4
++ 
++ --- Correct stderr is these 2 bytes:
++ 5
++ 
+- * Test test5 passed.
+?              ^ ^^
+
++ * Test test5 failed.
+?              ^ ^^
+
++ --- Incorrect stderr of 2 bytes:
++ 5
++ 
++ --- Correct stderr is these 2 bytes:
++ 4
++ 
++ Exit status of 4 incorrect should be 5
+- ** 2 tests passed, 3 tests failed
+?    ^               ^
+
++ ** 1 tests passed, 4 tests failed
+?    ^               ^
+
 You can reproduce this test by executing these commands:
   rm -rf .mygive
   mygive-add project stderr.tests
 mygive-test project stderr_wrong.sh
-Test 24_test (test incorrect stderr with no new line + incorrect exit) - failed (errors)
-Your program produced these errors:
-stat: cannot statx './stderr/test1/stdin': No such file or directory
-./mygive-test: 136: arithmetic expression: expecting primary: "1 - "
+Test 24_test (test incorrect stderr with no new line + incorrect exit) - failed (Incorrect output)
+Your program produced these 13 lines of output:
+directory .mygive created
+assignment project created
+* Test test1 failed.
+Missing newline at end of stdout
+* Test test2 failed.
+Missing newline at end of stdout
+* Test test3 failed.
+Missing newline at end of stdout
+* Test test4 failed.
+Missing newline at end of stdout
+* Test test5 failed.
+Missing newline at end of stdout
+** 0 tests passed, 5 tests failed
+
+The correct 23 lines of output for this test were:
+directory .mygive created
+assignment project created
+* Test test1 failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 3
+* Test test2 failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 3
+* Test test3 failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 4
+* Test test4 failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 4
+* Test test5 failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 5
+** 0 tests passed, 5 tests failed
+
+The difference between your output(-) and the correct output(+) is:
+...
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 3
+  * Test test2 failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 3
+  * Test test3 failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 4
+  * Test test4 failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 4
+  * Test test5 failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 5
+  ** 0 tests passed, 5 tests failed
 You can reproduce this test by executing these commands:
   rm -rf .mygive
   mygive-add project stderr.tests
 mygive-test project stderr_no_newline.sh
-Test 25_mark (test incorrect stderr & incorrect exit) - failed (errors)
-Your program produced these errors:
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-./mygive-mark: 157: arithmetic expression: expecting primary: " - "
+Test 25_mark (test incorrect stderr & incorrect exit) - failed (Incorrect output)
+Your program produced these 53 lines of output:
+directory .mygive created
+assignment project created
+Submission accepted - submission 1: stderr_wrong.sh 47 bytes @ Wed Feb 23 09:39:04 2005
+Submission accepted - submission 1: stderr.sh 48 bytes @ Wed Feb 23 09:40:41 2005
+Submission accepted - submission 1: stderr.sh 48 bytes @ Wed Feb 23 09:42:20 2005
+Submission accepted - submission 2: stderr_wrong.sh 47 bytes @ Wed Feb 23 09:44:17 2005
+Submission accepted - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:45:46 2005
+Submission accepted - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:46:05 2005
+Submission accepted - submission 3: stderr_no_newline.sh 50 bytes @ Wed Feb 23 09:46:41 2005
+*** Student z5555555 - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:45:46 2005
+* Test test1_marking passed (8 marks).
+* Test test2_marking passed (7 marks).
+* Test test3_marking passed (5 marks).
+* Test test4_marking passed (13 marks).
+* Test test5_marking passed (19 marks).
+** 5 tests passed, 0 tests failed - mark: 52/52
+*** Student z6666666 - submission 2: stderr_wrong.sh 47 bytes @ Wed Feb 23 09:44:17 2005
+* Test test1_marking passed (8 marks).
+* Test test2_marking failed.
+--- Incorrect stdout of 2 bytes:
+2
+
+--- Correct stdout is these 2 bytes:
+1
+
+* Test test3_marking failed.
+--- Incorrect stdout of 2 bytes:
+4
+
+--- Correct stdout is these 2 bytes:
+5
+
+* Test test4_marking failed.
+--- Incorrect stdout of 2 bytes:
+5
+
+--- Correct stdout is these 2 bytes:
+4
+
+* Test test5_marking passed (19 marks).
+** 2 tests passed, 3 tests failed - mark: 27/52
+*** Student z7777777 - submission 3: stderr_no_newline.sh 50 bytes @ Wed Feb 23 09:46:41 2005
+* Test test1_marking failed.
+Missing newline at end of stdout
+* Test test2_marking failed.
+Missing newline at end of stdout
+* Test test3_marking failed.
+Missing newline at end of stdout
+* Test test4_marking failed.
+Missing newline at end of stdout
+* Test test5_marking failed.
+Missing newline at end of stdout
+** 0 tests passed, 5 tests failed - mark: 0/52
+
+The correct 84 lines of output for this test were:
+directory .mygive created
+assignment project created
+Submission accepted - submission 1: stderr_wrong.sh 47 bytes @ Wed Feb 23 09:39:04 2005
+Submission accepted - submission 1: stderr.sh 48 bytes @ Wed Feb 23 09:40:41 2005
+Submission accepted - submission 1: stderr.sh 48 bytes @ Wed Feb 23 09:42:20 2005
+Submission accepted - submission 2: stderr_wrong.sh 47 bytes @ Wed Feb 23 09:44:17 2005
+Submission accepted - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:45:46 2005
+Submission accepted - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:46:05 2005
+Submission accepted - submission 3: stderr_no_newline.sh 50 bytes @ Wed Feb 23 09:46:41 2005
+*** Student z5555555 - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:45:46 2005
+* Test test1_marking passed (8 marks).
+* Test test2_marking passed (7 marks).
+* Test test3_marking passed (5 marks).
+* Test test4_marking passed (13 marks).
+* Test test5_marking passed (19 marks).
+** 5 tests passed, 0 tests failed - mark: 52/52
+*** Student z6666666 - submission 2: stderr_wrong.sh 47 bytes @ Wed Feb 23 09:44:17 2005
+* Test test1_marking passed (8 marks).
+* Test test2_marking failed.
+--- Incorrect stdout of 2 bytes:
+2
+
+--- Correct stdout is these 2 bytes:
+1
+
+--- Incorrect stderr of 2 bytes:
+3
+
+--- Correct stderr is these 2 bytes:
+2
+
+Exit status of 1 incorrect should be 3
+* Test test3_marking failed.
+--- Incorrect stdout of 2 bytes:
+4
+
+--- Correct stdout is these 2 bytes:
+5
+
+Exit status of 5 incorrect should be 4
+* Test test4_marking failed.
+--- Incorrect stdout of 2 bytes:
+5
+
+--- Correct stdout is these 2 bytes:
+4
+
+--- Incorrect stderr of 2 bytes:
+4
+
+--- Correct stderr is these 2 bytes:
+5
+
+* Test test5_marking failed.
+--- Incorrect stderr of 2 bytes:
+5
+
+--- Correct stderr is these 2 bytes:
+4
+
+Exit status of 4 incorrect should be 5
+** 1 tests passed, 4 tests failed - mark: 8/52
+*** Student z7777777 - submission 3: stderr_no_newline.sh 50 bytes @ Wed Feb 23 09:46:41 2005
+* Test test1_marking failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 3
+* Test test2_marking failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 3
+* Test test3_marking failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 4
+* Test test4_marking failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 4
+* Test test5_marking failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 5
+** 0 tests passed, 5 tests failed - mark: 0/52
+
+The difference between your output(-) and the correct output(+) is:
+...
++ --- Incorrect stderr of 2 bytes:
++ 3
++ 
++ --- Correct stderr is these 2 bytes:
++ 2
++ 
++ Exit status of 1 incorrect should be 3
+  * Test test3_marking failed.
+  
++ Exit status of 5 incorrect should be 4
+  * Test test4_marking failed.
+  
+- * Test test5_marking passed (19 marks).
++ --- Incorrect stderr of 2 bytes:
++ 4
++ 
++ --- Correct stderr is these 2 bytes:
++ 5
++ 
++ * Test test5_marking failed.
++ --- Incorrect stderr of 2 bytes:
++ 5
++ 
++ --- Correct stderr is these 2 bytes:
++ 4
++ 
++ Exit status of 4 incorrect should be 5
+- ** 2 tests passed, 3 tests failed - mark: 27/52
+?    ^               ^                      ^^
+
++ ** 1 tests passed, 4 tests failed - mark: 8/52
+?    ^               ^                      ^
+
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 3
+  * Test test2_marking failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 3
+  * Test test3_marking failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 4
+  * Test test4_marking failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 4
+  * Test test5_marking failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 5
+  ** 0 tests passed, 5 tests failed - mark: 0/52
 You can reproduce this test by executing these commands:
   rm -rf .mygive
   mygive-add project stderr.tests
@@ -383,4 +596,4 @@ FAKETIME="2005-02-23 09:45:46" mygive-submit project z5555555 stderr.sh
 FAKETIME="2005-02-23 09:46:05" mygive-submit project z7777777 stderr.sh
 FAKETIME="2005-02-23 09:46:41" mygive-submit project z7777777 stderr_no_newline.sh
 FAKETIME="2005-02-23 09:48:22" mygive-mark project
-17 tests passed 8 tests failed
+22 tests passed 3 tests failed
