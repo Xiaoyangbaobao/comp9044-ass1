@@ -23,6 +23,6 @@ if ! test -d ".mygive/$ass"; then
     exit 1
 fi
 
-rm -rf "./mygive/$ass"
+rm -rf ".mygive/$ass"
 echo "assignment $ass removed"
 exit 0
