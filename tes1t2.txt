@@ -248,22 +248,82 @@ Test 11_fetch (fetch) - passed
 Test 12_fetch (fetch - no submission number) - passed
 Test 13_fetch (fetch - negative submission number) - passed
 Test 14_fetch (fetch error) - passed
-Test 15_test (test) - failed (errors)
-Your program produced these errors:
-./mygive-test: 136: arithmetic expression: expecting EOF: "3 - 2025-07-08 02:04:03.643832631 +1000s"
-You can reproduce this test by executing these commands:
-  rm -rf .mygive
-  mygive-add multiply_exercise multiply.tests
-mygive-test multiply_exercise multiply_right.py
-mygive-test multiply_exercise multiply_wrong.sh
+Test 15_test (test) - passed
 Test 16_test (test: argument error handling) - passed
-Test 17_mark (mark 1 assignment) - failed (errors)
-Your program produced these errors:
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-./mygive-mark: 157: arithmetic expression: expecting primary: " - "
+Test 17_mark (mark 1 assignment) - failed (Incorrect output)
+Your program produced these 31 lines of output:
+directory .mygive created
+assignment lab2 created
+no submissions for z1234567
+Submission accepted - submission 1: multiply_wrong.sh 48 bytes @ Sun Dec  5 20:42:50 1999
+.mygive/lab2/z1234567
+*** Student z1234567 - submission 1: multiply_wrong.sh 48 bytes @ Sun Dec  5 20:42:50 1999
+* Test marking1 passed (10 marks).
+* Test marking2 failed.
+--- Incorrect stdout of 3 bytes:
+16
+
+--- Correct stdout is these 3 bytes:
+12
+
+* Test marking3 failed.
+--- Incorrect stdout of 2 bytes:
+9
+
+--- Correct stdout is these 3 bytes:
+12
+
+* Test marking4 passed (42 marks).
+** 2 tests passed, 2 tests failed - mark: 52/102
+Submission accepted - submission 2: multiply_right.py 78 bytes @ Sun Dec  5 20:44:35 1999
+.mygive/lab2/z1234567
+*** Student z1234567 - submission 2: multiply_right.py 78 bytes @ Sun Dec  5 20:44:35 1999
+* Test marking1 passed (10 marks).
+* Test marking2 passed (30 marks).
+* Test marking3 passed (20 marks).
+* Test marking4 passed (42 marks).
+** 4 tests passed, 0 tests failed - mark: 102/102
+
+The correct 29 lines of output for this test were:
+directory .mygive created
+assignment lab2 created
+no submissions for z1234567
+Submission accepted - submission 1: multiply_wrong.sh 48 bytes @ Sun Dec  5 20:42:50 1999
+*** Student z1234567 - submission 1: multiply_wrong.sh 48 bytes @ Sun Dec  5 20:42:50 1999
+* Test marking1 passed (10 marks).
+* Test marking2 failed.
+--- Incorrect stdout of 3 bytes:
+16
+
+--- Correct stdout is these 3 bytes:
+12
+
+* Test marking3 failed.
+--- Incorrect stdout of 2 bytes:
+9
+
+--- Correct stdout is these 3 bytes:
+12
+
+* Test marking4 passed (42 marks).
+** 2 tests passed, 2 tests failed - mark: 52/102
+Submission accepted - submission 2: multiply_right.py 78 bytes @ Sun Dec  5 20:44:35 1999
+*** Student z1234567 - submission 2: multiply_right.py 78 bytes @ Sun Dec  5 20:44:35 1999
+* Test marking1 passed (10 marks).
+* Test marking2 passed (30 marks).
+* Test marking3 passed (20 marks).
+* Test marking4 passed (42 marks).
+** 4 tests passed, 0 tests failed - mark: 102/102
+
+The difference between your output(-) and the correct output(+) is:
+...
+  Submission accepted - submission 1: multiply_wrong.sh 48 bytes @ Sun Dec  5 20:42:50 1999
+- .mygive/lab2/z1234567
+  *** Student z1234567 - submission 1: multiply_wrong.sh 48 bytes @ Sun Dec  5 20:42:50 1999
+  Submission accepted - submission 2: multiply_right.py 78 bytes @ Sun Dec  5 20:44:35 1999
+- .mygive/lab2/z1234567
+  *** Student z1234567 - submission 2: multiply_right.py 78 bytes @ Sun Dec  5 20:44:35 1999
+...
 You can reproduce this test by executing these commands:
   rm -rf .mygive
   mygive-add lab2 multiply.tests
@@ -274,15 +334,160 @@ FAKETIME="1999-12-05 20:44:35" mygive-submit lab2 z1234567 multiply_right.py
 FAKETIME="1999-12-05 20:46:07" mygive-mark lab2
 Test 18_summary (rm) - passed
 Test 19_summary (add,rm,add) - passed
-Test 20_mark (test newline handling) - failed (errors)
-Your program produced these errors:
-stat: cannot statx './hello/four_newlines/stdin': No such file or directory
-./mygive-test: 136: arithmetic expression: expecting primary: "34 - "
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-./mygive-mark: 157: arithmetic expression: expecting primary: " - "
+Test 20_mark (test newline handling) - failed (Incorrect output)
+Your program produced these 72 lines of output:
+directory .mygive created
+assignment hello created
+* Test four_newlines passed.
+* Test no_newline passed.
+* Test no_output passed.
+* Test one_newline passed.
+* Test three_newlines passed.
+* Test two_newlines passed.
+** 6 tests passed, 0 tests failed
+* Test four_newlines failed.
+--- Incorrect stdout of 34 bytes:
+Hello COMP2041 and Hello COMP9044
+
+--- Correct stdout is these 37 bytes:
+Hello COMP2041 and Hello COMP9044
+
+
+
+
+* Test no_newline failed.
+Extra newline at end of stdout
+* Test no_output failed.
+--- No stdout expected, these 34 bytes produced:
+Hello COMP2041 and Hello COMP9044
+
+* Test one_newline passed.
+* Test three_newlines failed.
+--- No stdout produced, these 36 bytes expected:
+Hello COMP2041 and Hello COMP9044
+
+
+
+* Test two_newlines failed.
+Missing newline at end of stdout
+** 1 tests passed, 5 tests failed
+Submission accepted - submission 1: hello.sh 143 bytes @ Fri Sep 16 11:51:06 1994
+Submission accepted - submission 1: hello_wrong0.sh 82 bytes @ Fri Sep 16 11:51:15 1994
+.mygive/hello/z5000000
+.mygive/hello/z6000000
+*** Student z5000000 - submission 1: hello.sh 143 bytes @ Fri Sep 16 11:51:06 1994
+* Test five_newlines passed (500 marks).
+* Test ten_newlines passed (1500 marks).
+** 2 tests passed, 0 tests failed - mark: 2000/2000
+*** Student z6000000 - submission 1: hello_wrong0.sh 82 bytes @ Fri Sep 16 11:51:15 1994
+* Test five_newlines failed.
+--- Incorrect stdout of 34 bytes:
+Hello COMP2041 and Hello COMP9044
+
+--- Correct stdout is these 38 bytes:
+Hello COMP2041 and Hello COMP9044
+
+
+
+
+
+* Test ten_newlines failed.
+--- Incorrect stdout of 34 bytes:
+Hello COMP2041 and Hello COMP9044
+
+--- Correct stdout is these 43 bytes:
+Hello COMP2041 and Hello COMP9044
+
+
+
+
+
+
+
+
+
+
+** 0 tests passed, 2 tests failed - mark: 0/2000
+
+The correct 70 lines of output for this test were:
+directory .mygive created
+assignment hello created
+* Test four_newlines passed.
+* Test no_newline passed.
+* Test no_output passed.
+* Test one_newline passed.
+* Test three_newlines passed.
+* Test two_newlines passed.
+** 6 tests passed, 0 tests failed
+* Test four_newlines failed.
+--- Incorrect stdout of 34 bytes:
+Hello COMP2041 and Hello COMP9044
+
+--- Correct stdout is these 37 bytes:
+Hello COMP2041 and Hello COMP9044
+
+
+
+
+* Test no_newline failed.
+Extra newline at end of stdout
+* Test no_output failed.
+--- No stdout expected, these 34 bytes produced:
+Hello COMP2041 and Hello COMP9044
+
+* Test one_newline passed.
+* Test three_newlines failed.
+--- No stdout produced, these 36 bytes expected:
+Hello COMP2041 and Hello COMP9044
+
+
+
+* Test two_newlines failed.
+Missing newline at end of stdout
+** 1 tests passed, 5 tests failed
+Submission accepted - submission 1: hello.sh 143 bytes @ Fri Sep 16 11:51:06 1994
+Submission accepted - submission 1: hello_wrong0.sh 82 bytes @ Fri Sep 16 11:51:15 1994
+*** Student z5000000 - submission 1: hello.sh 143 bytes @ Fri Sep 16 11:51:06 1994
+* Test five_newlines passed (500 marks).
+* Test ten_newlines passed (1500 marks).
+** 2 tests passed, 0 tests failed - mark: 2000/2000
+*** Student z6000000 - submission 1: hello_wrong0.sh 82 bytes @ Fri Sep 16 11:51:15 1994
+* Test five_newlines failed.
+--- Incorrect stdout of 34 bytes:
+Hello COMP2041 and Hello COMP9044
+
+--- Correct stdout is these 38 bytes:
+Hello COMP2041 and Hello COMP9044
+
+
+
+
+
+* Test ten_newlines failed.
+--- Incorrect stdout of 34 bytes:
+Hello COMP2041 and Hello COMP9044
+
+--- Correct stdout is these 43 bytes:
+Hello COMP2041 and Hello COMP9044
+
+
+
+
+
+
+
+
+
+
+** 0 tests passed, 2 tests failed - mark: 0/2000
+
+The difference between your output(-) and the correct output(+) is:
+...
+  Submission accepted - submission 1: hello_wrong0.sh 82 bytes @ Fri Sep 16 11:51:15 1994
+- .mygive/hello/z5000000
+- .mygive/hello/z6000000
+  *** Student z5000000 - submission 1: hello.sh 143 bytes @ Fri Sep 16 11:51:06 1994
+...
 You can reproduce this test by executing these commands:
   rm -rf .mygive
   mygive-add hello hello.tests
@@ -291,36 +496,607 @@ mygive-test hello hello_wrong0.sh
 FAKETIME="1994-09-16 11:51:06" mygive-submit hello z5000000 hello.sh
 FAKETIME="1994-09-16 11:51:15" mygive-submit hello z6000000 hello_wrong0.sh
 FAKETIME="1994-09-16 11:53:11" mygive-mark hello
-Test 21_mark (test option handling) - failed (errors)
-Your program produced these errors:
-stat: cannot statx './answer/ignore_bcw/stdin': No such file or directory
-stat: cannot statx './answer/ignore_blank_lines/stdin': No such file or directory
-stat: cannot statx './answer/ignore_case/stdin': No such file or directory
-stat: cannot statx './answer/ignore_digits/stdin': No such file or directory
-./mygive-test: 136: arithmetic expression: expecting primary: "5 - "
-stat: cannot statx './answer/check_bcw/stdin': No such file or directory
-./mygive-test: 136: arithmetic expression: expecting primary: "19 - "
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-./mygive-mark: 157: arithmetic expression: expecting primary: " - "
+Test 21_mark (test option handling) - failed (Incorrect output)
+Your program produced these 266 lines of output:
+directory .mygive created
+assignment answer created
+* Test check_bcw passed.
+* Test check_blank_lines passed.
+* Test check_case passed.
+* Test check_digits passed.
+* Test check_whitespace passed.
+* Test default passed.
+* Test ignore_bcw failed.
+--- No stdout produced, these 19 bytes expected:
+The
+
+answer is  42
+
+* Test ignore_blank_lines failed.
+--- No stdout produced, these 19 bytes expected:
+The
+
+answer is  42
+
+* Test ignore_case failed.
+--- No stdout produced, these 19 bytes expected:
+The
+
+answer is  42
+
+* Test ignore_digits failed.
+--- No stdout produced, these 19 bytes expected:
+The
+
+answer is  42
+
+* Test ignore_whitespace failed.
+--- No stdout produced, these 19 bytes expected:
+The
+
+answer is  42
+
+** 6 tests passed, 5 tests failed
+* Test check_bcw failed.
+--- Incorrect stdout of 19 bytes:
+THE
+answer  is 42
+
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test check_blank_lines failed.
+--- Incorrect stdout of 19 bytes:
+The
+answer is  42
+
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test check_case failed.
+--- Incorrect stdout of 19 bytes:
+the
+
+ANSWER is  42
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test check_digits failed.
+--- Incorrect stdout of 48 bytes:
+There is extra
+text here
+but answer is still 42
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test check_whitespace failed.
+--- Incorrect stdout of 26 bytes:
+ The 
+  
+answer    is 42 
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test default passed.
+* Test ignore_bcw failed.
+--- No stdout produced, these 19 bytes expected:
+The
+
+answer is  42
+
+* Test ignore_blank_lines failed.
+--- No stdout produced, these 19 bytes expected:
+The
+
+answer is  42
+
+* Test ignore_case failed.
+--- No stdout produced, these 19 bytes expected:
+The
+
+answer is  42
+
+* Test ignore_digits failed.
+--- No stdout produced, these 19 bytes expected:
+The
+
+answer is  42
+
+* Test ignore_whitespace failed.
+--- No stdout produced, these 19 bytes expected:
+The
+
+answer is  42
+
+** 1 tests passed, 10 tests failed
+Submission accepted - submission 1: answer.sh 47 bytes @ Mon Jun  6 13:36:48 2050
+Submission accepted - submission 1: answer_wrong.sh 407 bytes @ Mon Jun  6 13:38:24 2050
+.mygive/answer/z1234567
+.mygive/answer/z7654321
+*** Student z1234567 - submission 1: answer.sh 47 bytes @ Mon Jun  6 13:36:48 2050
+* Test check_bcw_marking passed (1 marks).
+* Test check_blank_lines_marking passed (1 marks).
+* Test check_case_marking passed (1 marks).
+* Test check_digits_marking passed (1 marks).
+* Test check_whitespace_marking passed (1 marks).
+* Test default_marking passed (1 marks).
+* Test ignore_bcw_marking failed.
+--- No stdout produced, these 19 bytes expected:
+The
+
+answer is  42
+
+* Test ignore_blank_lines_marking failed.
+--- No stdout produced, these 19 bytes expected:
+The
+
+answer is  42
+
+* Test ignore_case_marking failed.
+--- No stdout produced, these 19 bytes expected:
+The
+
+answer is  42
+
+* Test ignore_digits_marking failed.
+--- Incorrect stdout of 5 bytes:
+
+
+42
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test ignore_whitespace_marking failed.
+--- No stdout produced, these 19 bytes expected:
+The
+
+answer is  42
+
+** 6 tests passed, 5 tests failed - mark: 6/11
+*** Student z7654321 - submission 1: answer_wrong.sh 407 bytes @ Mon Jun  6 13:38:24 2050
+* Test check_bcw_marking failed.
+--- Incorrect stdout of 19 bytes:
+THE
+answer  is 42
+
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test check_blank_lines_marking failed.
+--- Incorrect stdout of 19 bytes:
+The
+answer is  42
+
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test check_case_marking failed.
+--- Incorrect stdout of 19 bytes:
+the
+
+ANSWER is  42
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test check_digits_marking failed.
+--- Incorrect stdout of 48 bytes:
+There is extra
+text here
+but answer is still 42
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test check_whitespace_marking failed.
+--- Incorrect stdout of 26 bytes:
+ The 
+  
+answer    is 42 
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test default_marking passed (1 marks).
+* Test ignore_bcw_marking failed.
+--- No stdout produced, these 19 bytes expected:
+The
+
+answer is  42
+
+* Test ignore_blank_lines_marking failed.
+--- No stdout produced, these 19 bytes expected:
+The
+
+answer is  42
+
+* Test ignore_case_marking failed.
+--- Incorrect stdout of 19 bytes:
+the
+
+answer is  42
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test ignore_digits_marking failed.
+--- No stdout produced, these 19 bytes expected:
+The
+...
+
+
+The correct 154 lines of output for this test were:
+directory .mygive created
+assignment answer created
+* Test check_bcw passed.
+* Test check_blank_lines passed.
+* Test check_case passed.
+* Test check_digits passed.
+* Test check_whitespace passed.
+* Test default passed.
+* Test ignore_bcw passed.
+* Test ignore_blank_lines passed.
+* Test ignore_case passed.
+* Test ignore_digits passed.
+* Test ignore_whitespace passed.
+** 11 tests passed, 0 tests failed
+* Test check_bcw failed.
+--- Incorrect stdout of 19 bytes:
+THE
+answer  is 42
+
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test check_blank_lines failed.
+--- Incorrect stdout of 19 bytes:
+The
+answer is  42
+
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test check_case failed.
+--- Incorrect stdout of 19 bytes:
+the
+
+ANSWER is  42
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test check_digits failed.
+--- Incorrect stdout of 48 bytes:
+There is extra
+text here
+but answer is still 42
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test check_whitespace failed.
+--- Incorrect stdout of 26 bytes:
+ The 
+  
+answer    is 42 
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test default passed.
+* Test ignore_bcw passed.
+* Test ignore_blank_lines passed.
+* Test ignore_case passed.
+* Test ignore_digits passed.
+* Test ignore_whitespace passed.
+** 6 tests passed, 5 tests failed
+Submission accepted - submission 1: answer.sh 47 bytes @ Mon Jun  6 13:36:48 2050
+Submission accepted - submission 1: answer_wrong.sh 407 bytes @ Mon Jun  6 13:38:24 2050
+*** Student z1234567 - submission 1: answer.sh 47 bytes @ Mon Jun  6 13:36:48 2050
+* Test check_bcw_marking passed (1 marks).
+* Test check_blank_lines_marking passed (1 marks).
+* Test check_case_marking passed (1 marks).
+* Test check_digits_marking passed (1 marks).
+* Test check_whitespace_marking passed (1 marks).
+* Test default_marking passed (1 marks).
+* Test ignore_bcw_marking passed (1 marks).
+* Test ignore_blank_lines_marking passed (1 marks).
+* Test ignore_case_marking passed (1 marks).
+* Test ignore_digits_marking passed (1 marks).
+* Test ignore_whitespace_marking passed (1 marks).
+** 11 tests passed, 0 tests failed - mark: 11/11
+*** Student z7654321 - submission 1: answer_wrong.sh 407 bytes @ Mon Jun  6 13:38:24 2050
+* Test check_bcw_marking failed.
+--- Incorrect stdout of 19 bytes:
+THE
+answer  is 42
+
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test check_blank_lines_marking failed.
+--- Incorrect stdout of 19 bytes:
+The
+answer is  42
+
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test check_case_marking failed.
+--- Incorrect stdout of 19 bytes:
+the
+
+ANSWER is  42
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test check_digits_marking failed.
+--- Incorrect stdout of 48 bytes:
+There is extra
+text here
+but answer is still 42
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test check_whitespace_marking failed.
+--- Incorrect stdout of 26 bytes:
+ The 
+  
+answer    is 42 
+
+--- Correct stdout is these 19 bytes:
+The
+
+answer is  42
+
+* Test default_marking passed (1 marks).
+* Test ignore_bcw_marking passed (1 marks).
+* Test ignore_blank_lines_marking passed (1 marks).
+* Test ignore_case_marking passed (1 marks).
+* Test ignore_digits_marking passed (1 marks).
+* Test ignore_whitespace_marking passed (1 marks).
+** 6 tests passed, 5 tests failed - mark: 6/11
+
+The difference between your output(-) and the correct output(+) is:
+...
+  * Test default passed.
+- * Test ignore_bcw failed.
+?                   ^ ^^
+
++ * Test ignore_bcw passed.
+?                   ^ ^^
+
+- --- No stdout produced, these 19 bytes expected:
+- The
+- 
+- answer is  42
+- 
+- * Test ignore_blank_lines failed.
+?                           ^ ^^
+
++ * Test ignore_blank_lines passed.
+?                           ^ ^^
+
+- --- No stdout produced, these 19 bytes expected:
+- The
+- 
+- answer is  42
+- 
+- * Test ignore_case failed.
+?                    ^ ^^
+
++ * Test ignore_case passed.
+?                    ^ ^^
+
+- --- No stdout produced, these 19 bytes expected:
+- The
+- 
+- answer is  42
+- 
+- * Test ignore_digits failed.
+?                      ^ ^^
+
++ * Test ignore_digits passed.
+?                      ^ ^^
+
+- --- No stdout produced, these 19 bytes expected:
+- The
+- 
+- answer is  42
+- 
+- * Test ignore_whitespace failed.
+?                          ^ ^^
+
++ * Test ignore_whitespace passed.
+?                          ^ ^^
+
+- --- No stdout produced, these 19 bytes expected:
+- The
+- 
+- answer is  42
+- 
+- ** 6 tests passed, 5 tests failed
+?    ^               ^
+
++ ** 11 tests passed, 0 tests failed
+?    ^^               ^
+
+  * Test default passed.
+- * Test ignore_bcw failed.
+?                   ^ ^^
+
++ * Test ignore_bcw passed.
+?                   ^ ^^
+
+- --- No stdout produced, these 19 bytes expected:
+- The
+- 
+- answer is  42
+- 
+- * Test ignore_blank_lines failed.
+?                           ^ ^^
+
++ * Test ignore_blank_lines passed.
+?                           ^ ^^
+
+- --- No stdout produced, these 19 bytes expected:
+- The
+- 
+- answer is  42
+- 
+- * Test ignore_case failed.
+?                    ^ ^^
+
++ * Test ignore_case passed.
+?                    ^ ^^
+
+- --- No stdout produced, these 19 bytes expected:
+- The
+- 
+- answer is  42
+- 
+- * Test ignore_digits failed.
+?                      ^ ^^
+
++ * Test ignore_digits passed.
+?                      ^ ^^
+
+- --- No stdout produced, these 19 bytes expected:
+- The
+- 
+- answer is  42
+- 
+- * Test ignore_whitespace failed.
+?                          ^ ^^
+
++ * Test ignore_whitespace passed.
+?                          ^ ^^
+
+- --- No stdout produced, these 19 bytes expected:
+- The
+- 
+- answer is  42
+- 
+- ** 1 tests passed, 10 tests failed
+?    ^               ^^
+
++ ** 6 tests passed, 5 tests failed
+?    ^               ^
+
+  Submission accepted - submission 1: answer_wrong.sh 407 bytes @ Mon Jun  6 13:38:24 2050
+- .mygive/answer/z1234567
+- .mygive/answer/z7654321
+  *** Student z1234567 - submission 1: answer.sh 47 bytes @ Mon Jun  6 13:36:48 2050
+  * Test check_digits_marking passed (1 marks).
++ * Test check_whitespace_marking passed (1 marks).
++ * Test default_marking passed (1 marks).
++ * Test ignore_bcw_marking passed (1 marks).
++ * Test ignore_blank_lines_marking passed (1 marks).
++ * Test ignore_case_marking passed (1 marks).
++ * Test ignore_digits_marking passed (1 marks).
++ * Test ignore_whitespace_marking passed (1 marks).
++ ** 11 tests passed, 0 tests failed - mark: 11/11
++ *** Student z7654321 - submission 1: answer_wrong.sh 407 bytes @ Mon Jun  6 13:38:24 2050
++ * Test check_bcw_marking failed.
++ --- Incorrect stdout of 19 bytes:
++ THE
++ answer  is 42
++ 
++ 
++ --- Correct stdout is these 19 bytes:
++ The
++ 
++ answer is  42
++ 
++ * Test check_blank_lines_marking failed.
++ --- Incorrect stdout of 19 bytes:
++ The
++ answer is  42
++ 
++ 
++ --- Correct stdout is these 19 bytes:
++ The
++ 
++ answer is  42
++ 
++ * Test check_case_marking failed.
++ --- Incorrect stdout of 19 bytes:
++ the
++ 
++ ANSWER is  42
++ 
++ --- Correct stdout is these 19 bytes:
++ The
++ 
++ answer is  42
++ 
++ * Test check_digits_marking failed.
++ --- Incorrect stdout of 48 bytes:
++ There is extra
++ text here
++ but answer is still 42
++ 
++ --- Correct stdout is these 19 bytes:
++ The
++ 
++ answer is  42
+...
 You can reproduce this test by executing these commands:
   rm -rf .mygive
   mygive-add answer answer.tests
@@ -329,14 +1105,80 @@ mygive-test answer answer_wrong.sh
 FAKETIME="2050-06-06 13:36:48" mygive-submit answer z1234567 answer.sh
 FAKETIME="2050-06-06 13:38:24" mygive-submit answer z7654321 answer_wrong.sh
 FAKETIME="2050-06-06 13:38:30" mygive-mark answer
-Test 22_mark (test stdin & argument handling handling) - failed (errors)
-Your program produced these errors:
-./mygive-test: 136: arithmetic expression: expecting EOF: "2 - 2025-07-08 02:04:05.755852334 +1000s"
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-./mygive-mark: 157: arithmetic expression: expecting primary: " - "
+Test 22_mark (test stdin & argument handling handling) - failed (Incorrect output)
+Your program produced these 32 lines of output:
+directory .mygive created
+assignment test1 created
+* Test label1 passed.
+* Test label2 passed.
+** 2 tests passed, 0 tests failed
+* Test label1 passed.
+* Test label2 failed.
+--- Incorrect stdout of 2 bytes:
+3
+
+--- Correct stdout is these 2 bytes:
+4
+
+** 1 tests passed, 1 tests failed
+Submission accepted - submission 1: grep.sh 22 bytes @ Sun Apr 13 13:47:33 2003
+Submission accepted - submission 1: grep_wrong.sh 20 bytes @ Sun Apr 13 13:48:23 2003
+.mygive/test1/z5555555
+.mygive/test1/z6666666
+*** Student z5555555 - submission 1: grep.sh 22 bytes @ Sun Apr 13 13:47:33 2003
+* Test label1_marking passed (13 marks).
+* Test label2_marking passed (17 marks).
+** 2 tests passed, 0 tests failed - mark: 30/30
+*** Student z6666666 - submission 1: grep_wrong.sh 20 bytes @ Sun Apr 13 13:48:23 2003
+* Test label1_marking passed (13 marks).
+* Test label2_marking failed.
+--- Incorrect stdout of 2 bytes:
+3
+
+--- Correct stdout is these 2 bytes:
+4
+
+** 1 tests passed, 1 tests failed - mark: 13/30
+
+The correct 30 lines of output for this test were:
+directory .mygive created
+assignment test1 created
+* Test label1 passed.
+* Test label2 passed.
+** 2 tests passed, 0 tests failed
+* Test label1 passed.
+* Test label2 failed.
+--- Incorrect stdout of 2 bytes:
+3
+
+--- Correct stdout is these 2 bytes:
+4
+
+** 1 tests passed, 1 tests failed
+Submission accepted - submission 1: grep.sh 22 bytes @ Sun Apr 13 13:47:33 2003
+Submission accepted - submission 1: grep_wrong.sh 20 bytes @ Sun Apr 13 13:48:23 2003
+*** Student z5555555 - submission 1: grep.sh 22 bytes @ Sun Apr 13 13:47:33 2003
+* Test label1_marking passed (13 marks).
+* Test label2_marking passed (17 marks).
+** 2 tests passed, 0 tests failed - mark: 30/30
+*** Student z6666666 - submission 1: grep_wrong.sh 20 bytes @ Sun Apr 13 13:48:23 2003
+* Test label1_marking passed (13 marks).
+* Test label2_marking failed.
+--- Incorrect stdout of 2 bytes:
+3
+
+--- Correct stdout is these 2 bytes:
+4
+
+** 1 tests passed, 1 tests failed - mark: 13/30
+
+The difference between your output(-) and the correct output(+) is:
+...
+  Submission accepted - submission 1: grep_wrong.sh 20 bytes @ Sun Apr 13 13:48:23 2003
+- .mygive/test1/z5555555
+- .mygive/test1/z6666666
+  *** Student z5555555 - submission 1: grep.sh 22 bytes @ Sun Apr 13 13:47:33 2003
+...
 You can reproduce this test by executing these commands:
   rm -rf .mygive
   mygive-add test1 grep.tests
@@ -345,29 +1187,400 @@ mygive-test test1 grep_wrong.sh
 FAKETIME="2003-04-13 13:47:33" mygive-submit test1 z5555555 grep.sh
 FAKETIME="2003-04-13 13:48:23" mygive-submit test1 z6666666 grep_wrong.sh
 FAKETIME="2003-04-13 13:49:22" mygive-mark test1
-Test 23_test (test incorrect stderr & incorrect exit) - failed (errors)
-Your program produced these errors:
-stat: cannot statx './stderr/test2/stdin': No such file or directory
-./mygive-test: 136: arithmetic expression: expecting primary: "2 - "
+Test 23_test (test incorrect stderr & incorrect exit) - failed (Incorrect output)
+Your program produced these 26 lines of output:
+directory .mygive created
+assignment project created
+* Test test1 passed.
+* Test test2 failed.
+--- Incorrect stdout of 2 bytes:
+2
+
+--- Correct stdout is these 2 bytes:
+1
+
+* Test test3 failed.
+--- Incorrect stdout of 2 bytes:
+4
+
+--- Correct stdout is these 2 bytes:
+5
+
+* Test test4 failed.
+--- Incorrect stdout of 2 bytes:
+5
+
+--- Correct stdout is these 2 bytes:
+4
+
+* Test test5 passed.
+** 2 tests passed, 3 tests failed
+
+The correct 47 lines of output for this test were:
+directory .mygive created
+assignment project created
+* Test test1 passed.
+* Test test2 failed.
+--- Incorrect stdout of 2 bytes:
+2
+
+--- Correct stdout is these 2 bytes:
+1
+
+--- Incorrect stderr of 2 bytes:
+3
+
+--- Correct stderr is these 2 bytes:
+2
+
+Exit status of 1 incorrect should be 3
+* Test test3 failed.
+--- Incorrect stdout of 2 bytes:
+4
+
+--- Correct stdout is these 2 bytes:
+5
+
+Exit status of 5 incorrect should be 4
+* Test test4 failed.
+--- Incorrect stdout of 2 bytes:
+5
+
+--- Correct stdout is these 2 bytes:
+4
+
+--- Incorrect stderr of 2 bytes:
+4
+
+--- Correct stderr is these 2 bytes:
+5
+
+* Test test5 failed.
+--- Incorrect stderr of 2 bytes:
+5
+
+--- Correct stderr is these 2 bytes:
+4
+
+Exit status of 4 incorrect should be 5
+** 1 tests passed, 4 tests failed
+
+The difference between your output(-) and the correct output(+) is:
+...
++ --- Incorrect stderr of 2 bytes:
++ 3
++ 
++ --- Correct stderr is these 2 bytes:
++ 2
++ 
++ Exit status of 1 incorrect should be 3
+  * Test test3 failed.
+  
++ Exit status of 5 incorrect should be 4
+  * Test test4 failed.
+  
++ --- Incorrect stderr of 2 bytes:
++ 4
++ 
++ --- Correct stderr is these 2 bytes:
++ 5
++ 
+- * Test test5 passed.
+?              ^ ^^
+
++ * Test test5 failed.
+?              ^ ^^
+
++ --- Incorrect stderr of 2 bytes:
++ 5
++ 
++ --- Correct stderr is these 2 bytes:
++ 4
++ 
++ Exit status of 4 incorrect should be 5
+- ** 2 tests passed, 3 tests failed
+?    ^               ^
+
++ ** 1 tests passed, 4 tests failed
+?    ^               ^
+
 You can reproduce this test by executing these commands:
   rm -rf .mygive
   mygive-add project stderr.tests
 mygive-test project stderr_wrong.sh
-Test 24_test (test incorrect stderr with no new line + incorrect exit) - failed (errors)
-Your program produced these errors:
-stat: cannot statx './stderr/test1/stdin': No such file or directory
-./mygive-test: 136: arithmetic expression: expecting primary: "1 - "
+Test 24_test (test incorrect stderr with no new line + incorrect exit) - failed (Incorrect output)
+Your program produced these 13 lines of output:
+directory .mygive created
+assignment project created
+* Test test1 failed.
+Missing newline at end of stdout
+* Test test2 failed.
+Missing newline at end of stdout
+* Test test3 failed.
+Missing newline at end of stdout
+* Test test4 failed.
+Missing newline at end of stdout
+* Test test5 failed.
+Missing newline at end of stdout
+** 0 tests passed, 5 tests failed
+
+The correct 23 lines of output for this test were:
+directory .mygive created
+assignment project created
+* Test test1 failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 3
+* Test test2 failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 3
+* Test test3 failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 4
+* Test test4 failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 4
+* Test test5 failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 5
+** 0 tests passed, 5 tests failed
+
+The difference between your output(-) and the correct output(+) is:
+...
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 3
+  * Test test2 failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 3
+  * Test test3 failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 4
+  * Test test4 failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 4
+  * Test test5 failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 5
+  ** 0 tests passed, 5 tests failed
 You can reproduce this test by executing these commands:
   rm -rf .mygive
   mygive-add project stderr.tests
 mygive-test project stderr_no_newline.sh
-Test 25_mark (test incorrect stderr & incorrect exit) - failed (errors)
-Your program produced these errors:
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-stat: invalid option -- '%'
-Try 'stat --help' for more information.
-./mygive-mark: 157: arithmetic expression: expecting primary: " - "
+Test 25_mark (test incorrect stderr & incorrect exit) - failed (Incorrect output)
+Your program produced these 56 lines of output:
+directory .mygive created
+assignment project created
+Submission accepted - submission 1: stderr_wrong.sh 47 bytes @ Wed Feb 23 09:39:04 2005
+Submission accepted - submission 1: stderr.sh 48 bytes @ Wed Feb 23 09:40:41 2005
+Submission accepted - submission 1: stderr.sh 48 bytes @ Wed Feb 23 09:42:20 2005
+Submission accepted - submission 2: stderr_wrong.sh 47 bytes @ Wed Feb 23 09:44:17 2005
+Submission accepted - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:45:46 2005
+Submission accepted - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:46:05 2005
+Submission accepted - submission 3: stderr_no_newline.sh 50 bytes @ Wed Feb 23 09:46:41 2005
+.mygive/project/z5555555
+.mygive/project/z6666666
+.mygive/project/z7777777
+*** Student z5555555 - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:45:46 2005
+* Test test1_marking passed (8 marks).
+* Test test2_marking passed (7 marks).
+* Test test3_marking passed (5 marks).
+* Test test4_marking passed (13 marks).
+* Test test5_marking passed (19 marks).
+** 5 tests passed, 0 tests failed - mark: 52/52
+*** Student z6666666 - submission 2: stderr_wrong.sh 47 bytes @ Wed Feb 23 09:44:17 2005
+* Test test1_marking passed (8 marks).
+* Test test2_marking failed.
+--- Incorrect stdout of 2 bytes:
+2
+
+--- Correct stdout is these 2 bytes:
+1
+
+* Test test3_marking failed.
+--- Incorrect stdout of 2 bytes:
+4
+
+--- Correct stdout is these 2 bytes:
+5
+
+* Test test4_marking failed.
+--- Incorrect stdout of 2 bytes:
+5
+
+--- Correct stdout is these 2 bytes:
+4
+
+* Test test5_marking passed (19 marks).
+** 2 tests passed, 3 tests failed - mark: 27/52
+*** Student z7777777 - submission 3: stderr_no_newline.sh 50 bytes @ Wed Feb 23 09:46:41 2005
+* Test test1_marking failed.
+Missing newline at end of stdout
+* Test test2_marking failed.
+Missing newline at end of stdout
+* Test test3_marking failed.
+Missing newline at end of stdout
+* Test test4_marking failed.
+Missing newline at end of stdout
+* Test test5_marking failed.
+Missing newline at end of stdout
+** 0 tests passed, 5 tests failed - mark: 0/52
+
+The correct 84 lines of output for this test were:
+directory .mygive created
+assignment project created
+Submission accepted - submission 1: stderr_wrong.sh 47 bytes @ Wed Feb 23 09:39:04 2005
+Submission accepted - submission 1: stderr.sh 48 bytes @ Wed Feb 23 09:40:41 2005
+Submission accepted - submission 1: stderr.sh 48 bytes @ Wed Feb 23 09:42:20 2005
+Submission accepted - submission 2: stderr_wrong.sh 47 bytes @ Wed Feb 23 09:44:17 2005
+Submission accepted - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:45:46 2005
+Submission accepted - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:46:05 2005
+Submission accepted - submission 3: stderr_no_newline.sh 50 bytes @ Wed Feb 23 09:46:41 2005
+*** Student z5555555 - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:45:46 2005
+* Test test1_marking passed (8 marks).
+* Test test2_marking passed (7 marks).
+* Test test3_marking passed (5 marks).
+* Test test4_marking passed (13 marks).
+* Test test5_marking passed (19 marks).
+** 5 tests passed, 0 tests failed - mark: 52/52
+*** Student z6666666 - submission 2: stderr_wrong.sh 47 bytes @ Wed Feb 23 09:44:17 2005
+* Test test1_marking passed (8 marks).
+* Test test2_marking failed.
+--- Incorrect stdout of 2 bytes:
+2
+
+--- Correct stdout is these 2 bytes:
+1
+
+--- Incorrect stderr of 2 bytes:
+3
+
+--- Correct stderr is these 2 bytes:
+2
+
+Exit status of 1 incorrect should be 3
+* Test test3_marking failed.
+--- Incorrect stdout of 2 bytes:
+4
+
+--- Correct stdout is these 2 bytes:
+5
+
+Exit status of 5 incorrect should be 4
+* Test test4_marking failed.
+--- Incorrect stdout of 2 bytes:
+5
+
+--- Correct stdout is these 2 bytes:
+4
+
+--- Incorrect stderr of 2 bytes:
+4
+
+--- Correct stderr is these 2 bytes:
+5
+
+* Test test5_marking failed.
+--- Incorrect stderr of 2 bytes:
+5
+
+--- Correct stderr is these 2 bytes:
+4
+
+Exit status of 4 incorrect should be 5
+** 1 tests passed, 4 tests failed - mark: 8/52
+*** Student z7777777 - submission 3: stderr_no_newline.sh 50 bytes @ Wed Feb 23 09:46:41 2005
+* Test test1_marking failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 3
+* Test test2_marking failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 3
+* Test test3_marking failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 4
+* Test test4_marking failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 4
+* Test test5_marking failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 5
+** 0 tests passed, 5 tests failed - mark: 0/52
+
+The difference between your output(-) and the correct output(+) is:
+...
+  Submission accepted - submission 3: stderr_no_newline.sh 50 bytes @ Wed Feb 23 09:46:41 2005
+- .mygive/project/z5555555
+- .mygive/project/z6666666
+- .mygive/project/z7777777
+  *** Student z5555555 - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:45:46 2005
+  
++ --- Incorrect stderr of 2 bytes:
++ 3
++ 
++ --- Correct stderr is these 2 bytes:
++ 2
++ 
++ Exit status of 1 incorrect should be 3
+  * Test test3_marking failed.
+  
++ Exit status of 5 incorrect should be 4
+  * Test test4_marking failed.
+  
+- * Test test5_marking passed (19 marks).
++ --- Incorrect stderr of 2 bytes:
++ 4
++ 
++ --- Correct stderr is these 2 bytes:
++ 5
++ 
++ * Test test5_marking failed.
++ --- Incorrect stderr of 2 bytes:
++ 5
++ 
++ --- Correct stderr is these 2 bytes:
++ 4
++ 
++ Exit status of 4 incorrect should be 5
+- ** 2 tests passed, 3 tests failed - mark: 27/52
+?    ^               ^                      ^^
+
++ ** 1 tests passed, 4 tests failed - mark: 8/52
+?    ^               ^                      ^
+
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 3
+  * Test test2_marking failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 3
+  * Test test3_marking failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 4
+  * Test test4_marking failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 4
+  * Test test5_marking failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 5
+  ** 0 tests passed, 5 tests failed - mark: 0/52
 You can reproduce this test by executing these commands:
   rm -rf .mygive
   mygive-add project stderr.tests
@@ -379,4 +1592,4 @@ FAKETIME="2005-02-23 09:45:46" mygive-submit project z5555555 stderr.sh
 FAKETIME="2005-02-23 09:46:05" mygive-submit project z7777777 stderr.sh
 FAKETIME="2005-02-23 09:46:41" mygive-submit project z7777777 stderr_no_newline.sh
 FAKETIME="2005-02-23 09:48:22" mygive-mark project
-17 tests passed 8 tests failed
+18 tests passed 7 tests failed
