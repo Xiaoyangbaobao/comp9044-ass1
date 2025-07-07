@@ -37,14 +37,14 @@ while read -r zid; do
     submission_time=$(cat "$zid_dir/$submission/.timestamp")
     file_name=$(find "$zid_dir/$submission" -maxdepth 1 -type f ! -name "*.timestamp" -print0 | xargs -0 -n1 basename)
     program_file="$zid_dir/$submission/$file_name"
-    #file_size=$(stat -c%s "$file_name")
-    file_size=$(stat -f"%z" "$zid_dir/$submission/$file_name")
+    file_size=$(stat -c%s "$file_name")
+    #file_size=$(stat -f"%z" "$zid_dir/$submission/$file_name")
     echo "*** Student $zid - submission $submission: $file_name $file_size bytes @ $submission_time"
 
     for test_file in $base_dir/tests/*; do
         test_dir=$(basename $test_file | cut -d'.' -f1)
         mkdir -p "$test_dir"
-        tar -xzf "$test_file" -C "$test_dir"
+        tar --warning=no_timestamp -xf "$test_file" -C "$test_dir"
 
         tmp_list=$(mktemp)
         find "$test_dir" -mindepth 1 -type d | sort > "$tmp_list"

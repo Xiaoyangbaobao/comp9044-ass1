@@ -117,13 +117,13 @@ for test_file in .mygive/$ass_name/tests/*; do
             echo "* Test $file_name failed."
             failed_tests=$((failed_tests+1))
 
-            result_size=$(stat -f"%z" "$result_stdout_file")
-            expected_result_size=$(stat -f"%z" "$expected_stdout_file")
+            # result_size=$(stat -f"%z" "$result_stdout_file")
+            # expected_result_size=$(stat -f"%z" "$expected_stdout_file")
 
             result_char_result=$(tail -c 1 "$result_stdout_file")
             expected_char_result=$(tail -c 1 "$expected_stdout_file")
-            #result_size=$(stat -c%s "$result_stdout_file")
-            #expected_result_size=$(stat -c%zs "./$file_dir/stdin")
+            result_size=$(stat -c%s "$result_stdout_file")
+            expected_result_size=$(stat -c%zs "./$file_dir/stdin")
 
             if [ ! -s "$expected_stdout_file" ] && [ -s "$result_stdout_file" ];then
                 echo "--- No stdout expected, these $result_size bytes produced:"

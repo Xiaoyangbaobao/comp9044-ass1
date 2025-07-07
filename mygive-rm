@@ -19,7 +19,7 @@ if ! echo "$ass" | grep -Eq "$ass_regex";then
 fi
 
 if ! test -d ".mygive/$ass"; then
-    echo "take-submit: assignment $ass not found" 1>&2
+    echo "mygive-submit: assignment $ass not found" 1>&2
     exit 1
 fi
 
