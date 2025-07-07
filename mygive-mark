@@ -2,9 +2,19 @@
 
 ass_name="$1"
 
+if [ $# -ne 1 ]; then
+    echo "usage: mygive-mark <assignment>" 1>&2
+    exit 1
+fi
+
+if ! test -d .mygive/"$ass_name"; then
+    echo "mygive-mark: assignment $ass_name not found" 1>&2
+    exit 1
+fi
+
 # check if assignment name is valid
 if [ "$(echo "$ass_name" | grep -Ec '^[a-z][a-zA-Z0-9_]*$')" -ne 1 ]; then
-    echo "mygive-test: invalid assignment: $ass_name" 1>&2
+    echo "mygive-mark: invalid assignment: $ass_name" 1>&2
     exit 1
 fi
 
@@ -37,16 +47,62 @@ while read -r zid; do
         tar -xzf "$test_file" -C "$test_dir"
 
         tmp_list=$(mktemp)
-        find "$test_dir" -type d -name "*marking*" > "$tmp_list"
+        find "$test_dir" -type d -name "*marking*" | sort > "$tmp_list"
         while read -r file_dir; do
                 file_name=$(basename $file_dir)
-                arguments=$(cat "./$file_dir/arguments")
-                marks=$(cat "./$file_dir/marks")
-                stdin=$(cat "./$file_dir/stdin")
-                stdout=$(cat "./$file_dir/stdout")
+                arguments=""
+                stdin=""
+                stdout=""
+                options=""
+                exit_status=0
+                stderr=""
+
+                if [ -f "./$file_dir/exit_status" ];then
+                    exit_status=$(cat "./$file_dir/exit_status")
+                fi
+                
+                if [ -f "./$file_dir/arguments" ];then
+                    arguments=$(cat "./$file_dir/arguments")
+                    if ! echo "$arguments" | grep -Eq "$arguments_regex";then
+                        echo "mygive-test: invalid arguments: $arguments" 1>&2
+                        exit "$exit_status"
+                    fi
+                fi
+
+                if [ -f "./$file_dir/stdin" ];then
+                    stdin=$(cat "./$file_dir/stdin")
+                fi
+            
+                if [ -f "./$file_dir/stdout" ];then
+                    stdout=$(cat "./$file_dir/stdout")
+                fi
+
+                if [ -f "./$file_dir/stderr" ];then
+                    stderr=$(cat "./$file_dir/stderr")
+                fi
+
+                if [ -f "./$file_dir/options" ];then
+                    options=$(cat "./$file_dir/options")
+                fi
 
                 result=$(echo "$stdin" | "$program_file" $arguments)
                 total_marks=$((total_marks+marks))
+
+                if echo "$options" | grep -q "b"; then
+                    result=$(echo "$result" | sed "/^$/d")
+                fi
+
+                if echo "$options" | grep -q "c"; then
+                result=$(echo "$result" | tr "[:upper:]" "[:lower:]")
+                fi
+
+                if echo "$options" | grep -q "w"; then
+                result=$(echo "$result" | tr -d ' \t')
+                fi
+
+                if echo "$options" | grep -q "d"; then
+                    result=$(echo "$result" | sed 's/[^0-9\n]//g')
+                fi
 
                 if [ "$result" = "$stdout" ];then
                     echo "* Test $file_name passed ($marks marks)."
@@ -55,6 +111,26 @@ while read -r zid; do
                 else
                     echo "* Test $file_name failed."
                     failed_tests=$((failed_tests+1))
+
+                    result_size=$(printf "%s\n" "$result" | wc -c | tr -s ' ')
+                    expected_result_size=$(printf "%s\n" "$stdout" | wc -c | tr -s ' ')
+
+                    if [ ! -n "$stdout" ];then
+                        echo "--- No stdout expected, these $result_size bytes produced:"
+                        echo "$result"
+                        echo ""
+                    elif [ ! -n "$result" ];then
+                        echo "--- No stdout produced, these $expected_result_size bytes expected:"
+                        echo "$stdout"
+                    else
+                        echo "--- Incorrect stdout of $result_size bytes:"
+                        echo "$result"
+                        echo ""
+                        
+                        echo "--- Correct stdout is these $expected_result_size bytes:"
+                        echo "$stdout"
+                        echo ""
+                    fi
                 fi
         done < "$tmp_list"
         #    rm -rf "$test_dir"
