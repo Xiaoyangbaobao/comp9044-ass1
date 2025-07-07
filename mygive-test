@@ -92,21 +92,36 @@ for test_file in .mygive/$ass_name/tests/*; do
             : > "$expected_stdout_file"
         fi
 
+        tmp_file=$(mktemp)
+
         if echo "$options" | grep -q "b"; then
-            cat "$result_stdout_file" | sed "/^$/d" > "$result_stdout_file"
+            sed -i '' "/^$/d" "$result_stdout_file"
+            sed -i '' "/^$/d" "$expected_stdout_file"
         fi
 
         if echo "$options" | grep -q "c"; then
-            cat "$result_stdout_file" | tr "[:upper:]" "[:lower:]" > "$result_stdout_file"
+            tr '[:upper:]' '[:lower:]' < "$result_stdout_file" > "$tmp_file"
+            mv "$tmp_file" "$result_stdout_file"
+            tr '[:upper:]' '[:lower:]' < "$expected_stdout_file" > "$tmp_file"
+            mv "$tmp_file" "$expected_stdout_file"
         fi
 
         if echo "$options" | grep -q "w"; then
-           cat "$result_stdout_file" | tr -d ' \t' > "$result_stdout_file"
+           tr -d ' \t' < "$result_stdout_file" > "$tmp_file"
+            mv "$tmp_file" "$result_stdout_file"
+            tr -d ' \t' < "$expected_stdout_file" > "$tmp_file"
+            mv "$tmp_file" "$expected_stdout_file"
         fi
 
         if echo "$options" | grep -q "d"; then
-            cat "$result_stdout_file" | sed 's/[^0-9\n]//g' > "$result_stdout_file"
+            sed -i '' 's/[^0-9\n]//g' "$result_stdout_file"
+            sed -i '' 's/[^0-9\n]//g' "$expected_stdout_file"
         fi
+            #   echo "Expected: "
+            #     cat "$expected_stdout_file"
+
+            #     echo "Result: "
+            #     cat "$result_stdout_file"
 
         cmp -s "$expected_stdout_file" "$result_stdout_file"
 

@@ -22,7 +22,7 @@ base_dir=".mygive/$ass_name"
 
 tmp_l=$(mktemp)
 find "$base_dir" -type d -maxdepth 1 | grep '/z[0-9]\{7\}$' | sort > "$tmp_l"
-cat "$tmp_l"
+
 while read -r zid; do
 
     passed_tests=0
@@ -112,21 +112,36 @@ while read -r zid; do
 
                 # echo "result: $result"
 
-                if echo "$options" | grep -q "b"; then
-                    cat "$result_stdout_file" | sed "/^$/d" > "$result_stdout_file"
-                fi
+                tmp_file=$(mktemp)
 
-                if echo "$options" | grep -q "c"; then
-                    cat "$result_stdout_file" | tr "[:upper:]" "[:lower:]" > "$result_stdout_file"
-                fi
+        if echo "$options" | grep -q "b"; then
+            sed -i '' "/^$/d" "$result_stdout_file"
+            sed -i '' "/^$/d" "$expected_stdout_file"
+        fi
 
-                if echo "$options" | grep -q "w"; then
-                cat "$result_stdout_file" | tr -d ' \t' > "$result_stdout_file"
-                fi
+        if echo "$options" | grep -q "c"; then
+            tr '[:upper:]' '[:lower:]' < "$result_stdout_file" > "$tmp_file"
+            mv "$tmp_file" "$result_stdout_file"
+            tr '[:upper:]' '[:lower:]' < "$expected_stdout_file" > "$tmp_file"
+            mv "$tmp_file" "$expected_stdout_file"
+        fi
 
-                if echo "$options" | grep -q "d"; then
-                    cat "$result_stdout_file" | sed 's/[^0-9\n]//g' > "$result_stdout_file"
-                fi
+        if echo "$options" | grep -q "w"; then
+           tr -d ' \t' < "$result_stdout_file" > "$tmp_file"
+            mv "$tmp_file" "$result_stdout_file"
+            tr -d ' \t' < "$expected_stdout_file" > "$tmp_file"
+            mv "$tmp_file" "$expected_stdout_file"
+        fi
+
+        if echo "$options" | grep -q "d"; then
+            sed -i '' 's/[^0-9\n]//g' "$result_stdout_file"
+            sed -i '' 's/[^0-9\n]//g' "$expected_stdout_file"
+        fi
+            #   echo "Expected: "
+            #     cat "$expected_stdout_file"
+
+            #     echo "Result: "
+            #     cat "$result_stdout_file"
 
                 cmp -s "$expected_stdout_file" "$result_stdout_file"
 
@@ -153,6 +168,7 @@ while read -r zid; do
                     elif [ ! -s "$result_stdout_file" ] && [ -s "$expected_stdout_file" ];then
                         echo "--- No stdout produced, these $expected_result_size bytes expected:"
                         cat "$expected_stdout_file"
+                        cat "$result_stdout_file"
                         echo ""
                     elif [ $(($result_size - $expected_result_size)) -eq 1 ] && [ "$result_char_result" = "" ];then
                         new_expected_file=$(mktemp)
