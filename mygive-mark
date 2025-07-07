@@ -110,21 +110,29 @@ while read -r zid; do
                 total_marks=$((total_marks+marks))
 
                 # echo "result: $result"
+                tmp_file=$(mktemp)
 
                 if echo "$options" | grep -q "b"; then
-                    cat "$result_stdout_file" | sed "/^$/d" > "$result_stdout_file"
+                    sed -i "/^$/d" "$result_stdout_file"
+                    sed -i "/^$/d" "$expected_stdout_file"
                 fi
 
                 if echo "$options" | grep -q "c"; then
-                    cat "$result_stdout_file" | tr "[:upper:]" "[:lower:]" > "$result_stdout_file"
+                    tr '[:upper:]' '[:lower:]' < "$result_stdout_file" > "$tmp_file"
+                    mv "$tmp_file" "$result_stdout_file"
+                    tr '[:upper:]' '[:lower:]' < "$expected_stdout_file" > "$tmp_file"
+                    mv "$tmp_file" "$expected_stdout_file"
                 fi
-
                 if echo "$options" | grep -q "w"; then
-                cat "$result_stdout_file" | tr -d ' \t' > "$result_stdout_file"
+                    tr -d ' \t' < "$result_stdout_file" > "$tmp_file"
+                    mv "$tmp_file" "$result_stdout_file"
+                    tr -d ' \t' < "$expected_stdout_file" > "$tmp_file"
+                    mv "$tmp_file" "$expected_stdout_file"
                 fi
 
                 if echo "$options" | grep -q "d"; then
-                    cat "$result_stdout_file" | sed 's/[^0-9\n]//g' > "$result_stdout_file"
+                    sed -i 's/[^0-9\n]//g' "$result_stdout_file"
+                    sed -i 's/[^0-9\n]//g' "$expected_stdout_file"
                 fi
 
                 cmp -s "$expected_stdout_file" "$result_stdout_file"
