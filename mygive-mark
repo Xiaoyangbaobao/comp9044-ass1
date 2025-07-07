@@ -56,6 +56,7 @@ while read -r zid; do
                 options=""
                 exit_status=0
                 stderr=""
+                marks=0
 
                 if [ -f "./$file_dir/exit_status" ];then
                     exit_status=$(cat "./$file_dir/exit_status")
@@ -85,8 +86,20 @@ while read -r zid; do
                     options=$(cat "./$file_dir/options")
                 fi
 
+                if [ -f "./$file_dir/marks" ];then
+                    marks=$(cat "./$file_dir/marks")
+                fi
+
+                # echo "arguments: $arguments"
+                # echo "stdin: $stdin"
+                # echo "stdout: $stdout"
+                # echo "stderr: $stderr"
+                # echo "marks: $marks"
+
                 result=$(echo "$stdin" | "$program_file" $arguments)
                 total_marks=$((total_marks+marks))
+
+                # echo "result: $result"
 
                 if echo "$options" | grep -q "b"; then
                     result=$(echo "$result" | sed "/^$/d")
