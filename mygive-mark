@@ -44,7 +44,7 @@ while read -r zid; do
     for test_file in $base_dir/tests/*; do
         test_dir=$(basename $test_file | cut -d'.' -f1)
         mkdir -p "$test_dir"
-        tar -xf "$test_file" -C "$test_dir"
+        tar --warning=no-timestamp -xf "$test_file" -C "$test_dir"
 
         tmp_list=$(mktemp)
         find "$test_dir" -type d -name "*marking*" | sort > "$tmp_list"
