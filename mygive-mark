@@ -44,7 +44,7 @@ while read -r zid; do
     for test_file in $base_dir/tests/*; do
         test_dir=$(basename $test_file | cut -d'.' -f1)
         mkdir -p "$test_dir"
-        tar --warning=no_timestamp -xf "$test_file" -C "$test_dir"
+        tar --warning=no-timestamp -xf "$test_file" -C "$test_dir"
 
         tmp_list=$(mktemp)
         find "$test_dir" -mindepth 1 -type d | sort > "$tmp_list"
@@ -138,13 +138,13 @@ while read -r zid; do
                     echo "* Test $file_name failed."
                     failed_tests=$((failed_tests+1))
 
-                    result_size=$(stat -f"%z" "$result_stdout_file")
-                    expected_result_size=$(stat -f"%z" "$expected_stdout_file")
+                    #result_size=$(stat -f"%z" "$result_stdout_file")
+                    #expected_result_size=$(stat -f"%z" "$expected_stdout_file")
 
                     result_char_result=$(tail -c 1 "$result_stdout_file")
                     expected_char_result=$(tail -c 1 "$expected_stdout_file")
-                    #result_size=$(stat -c%s "$result_stdout_file")
-                    #expected_result_size=$(stat -c%zs "./$file_dir/stdin")
+                    result_size=$(stat -c%s "$result_stdout_file")
+                    expected_result_size=$(stat -c%s "$expected_stdout_file")
 
                     if [ ! -s "$expected_stdout_file" ] && [ -s "$result_stdout_file" ];then
                         echo "--- No stdout expected, these $result_size bytes produced:"

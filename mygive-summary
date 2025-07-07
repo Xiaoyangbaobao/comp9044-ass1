@@ -1,5 +1,15 @@
 #!/bin/dash
 
+if ! test -d ".mygive";then
+    echo "tmygive-summary: mygive directory .mygive not found"
+    exit 1
+fi
+
+if test -z "$(ls -A .mygive/ 2>/dev/null)";then
+    echo "no assignments"
+    exit 1
+fi
+
 for ass in .mygive/*; do
 
     if [ -d "$ass" ];then

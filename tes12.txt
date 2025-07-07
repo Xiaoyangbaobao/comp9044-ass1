@@ -250,7 +250,7 @@ Test 13_fetch (fetch - negative submission number) - passed
 Test 14_fetch (fetch error) - passed
 Test 15_test (test) - failed (errors)
 Your program produced these errors:
-./mygive-test: 136: arithmetic expression: expecting EOF: "3 - 2025-07-08 02:04:03.643832631 +1000s"
+./mygive-test: 136: arithmetic expression: expecting EOF: "3 - 2025-07-08 02:05:17.152522593 +1000s"
 You can reproduce this test by executing these commands:
   rm -rf .mygive
   mygive-add multiply_exercise multiply.tests
@@ -297,9 +297,13 @@ stat: cannot statx './answer/ignore_bcw/stdin': No such file or directory
 stat: cannot statx './answer/ignore_blank_lines/stdin': No such file or directory
 stat: cannot statx './answer/ignore_case/stdin': No such file or directory
 stat: cannot statx './answer/ignore_digits/stdin': No such file or directory
-./mygive-test: 136: arithmetic expression: expecting primary: "5 - "
+stat: cannot statx './answer/ignore_whitespace/stdin': No such file or directory
 stat: cannot statx './answer/check_bcw/stdin': No such file or directory
 ./mygive-test: 136: arithmetic expression: expecting primary: "19 - "
+stat: invalid option -- '%'
+Try 'stat --help' for more information.
+stat: invalid option -- '%'
+Try 'stat --help' for more information.
 stat: invalid option -- '%'
 Try 'stat --help' for more information.
 stat: invalid option -- '%'
@@ -331,7 +335,7 @@ FAKETIME="2050-06-06 13:38:24" mygive-submit answer z7654321 answer_wrong.sh
 FAKETIME="2050-06-06 13:38:30" mygive-mark answer
 Test 22_mark (test stdin & argument handling handling) - failed (errors)
 Your program produced these errors:
-./mygive-test: 136: arithmetic expression: expecting EOF: "2 - 2025-07-08 02:04:05.755852334 +1000s"
+./mygive-test: 136: arithmetic expression: expecting EOF: "2 - 2025-07-08 02:05:19.616545866 +1000s"
 stat: invalid option -- '%'
 Try 'stat --help' for more information.
 stat: invalid option -- '%'
