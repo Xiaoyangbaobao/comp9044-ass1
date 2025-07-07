@@ -39,7 +39,7 @@ while read -r zid; do
     program_file="$zid_dir/$submission/$file_name"
     #file_size=$(stat -c%s "$file_name")
     file_size=$(stat -f"%z" "$zid_dir/$submission/$file_name")
-    echo "Student $zid - submission $submission: $file_name $file_size bytes @ $submission_time"
+    echo "*** Student $zid - submission $submission: $file_name $file_size bytes @ $submission_time"
 
     for test_file in $base_dir/tests/*; do
         test_dir=$(basename $test_file | cut -d'.' -f1)
