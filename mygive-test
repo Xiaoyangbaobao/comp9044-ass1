@@ -10,6 +10,11 @@ program_file="$2"
 
 arguments_regex="^[a-zA-Z0-9._ \-]*$"
 
+if ! test -d .mygive/"$ass_name"; then
+    echo "mygive-test: assignment $ass_name not found" 1>&2
+    exit 1
+fi
+
 # check if assignment name is valid
 if [ "$(echo "$ass_name" | grep -Ec '^[a-z][a-zA-Z0-9_]*$')" -ne 1 ]; then
     echo "mygive-test: invalid assignment: $ass_name" 1>&2
@@ -30,7 +35,7 @@ for test_file in .mygive/$ass_name/tests/*; do
    tar -xzf "$test_file" -C "$test_dir"
 
    tmp_list=$(mktemp)
-   find "$test_dir" -mindepth 1 -type d ! -name "*marking*" > "$tmp_list"
+   find "$test_dir" -mindepth 1 -type d ! -name "*marking*" | sort > "$tmp_list"
 
    while read -r file_dir; do
         file_name=$(basename $file_dir)
@@ -99,6 +104,27 @@ for test_file in .mygive/$ass_name/tests/*; do
         else
             echo "* Test $file_name failed."
             failed_tests=$((failed_tests+1))
+
+            result_size=$(printf "%s\n" "$result" | wc -c | tr -s ' ')
+            expected_result_size=$(printf "%s\n" "$stdout" | wc -c | tr -s ' ')
+
+            if [ ! -n "$stdout" ];then
+                echo "--- No stdout expected, these $result_size bytes produced:"
+                echo "$result"
+                echo ""
+            elif [ ! -n "$result" ];then
+                echo "--- No stdout produced, these $expected_result_size bytes expected:"
+                echo "$stdout"
+            else
+                echo "--- Incorrect stdout of $result_size bytes:"
+                echo "$result"
+                echo ""
+                
+                echo "--- Correct stdout is these $expected_result_size bytes:"
+                echo "$stdout"
+                echo ""
+            fi
+
         fi
    done < "$tmp_list"
 #    rm -rf "$test_dir"
