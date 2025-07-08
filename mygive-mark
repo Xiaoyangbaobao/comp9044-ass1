@@ -21,7 +21,7 @@ fi
 base_dir=".mygive/$ass_name"
 
 tmp_l=$(mktemp)
-find "$base_dir" -type d -maxdepth 1 | grep '/z[0-9]\{7\}$' | sort > "$tmp_l"
+find "$base_dir" -type d -maxdepth 1 | grep '/z[0-9]\{7\}$' | sort >"$tmp_l"
 
 while read -r zid; do
 
@@ -30,10 +30,10 @@ while read -r zid; do
     total_marks=0
     curr_marks=0
 
-    zid=$(basename $zid)
+    zid=$(basename "$zid")
     zid_dir="$base_dir/$zid"
 
-    submission=$( ls -1d "$zid_dir/"* 2>/dev/null | sed 's/.*\///' | sort | tail -n1)
+    submission=$(ls -1d "$zid_dir/"* 2>/dev/null | sed 's/.*\///' | sort | tail -n1)
     submission_time=$(cat "$zid_dir/$submission/.timestamp")
     file_name=$(find "$zid_dir/$submission" -maxdepth 1 -type f ! -name "*.timestamp" -print0 | xargs -0 -n1 basename)
     program_file="$zid_dir/$submission/$file_name"
@@ -41,180 +41,243 @@ while read -r zid; do
     file_size=$(stat -f"%z" "$zid_dir/$submission/$file_name")
     echo "*** Student $zid - submission $submission: $file_name $file_size bytes @ $submission_time"
 
-    for test_file in $base_dir/tests/*; do
-        test_dir=$(basename $test_file | cut -d'.' -f1)
+    for test_file in "$base_dir/tests/*"; do
+        test_dir=$(basename "$test_file" | cut -d'.' -f1)
         mkdir -p "$test_dir"
         tar -xzf "$test_file" -C "$test_dir"
 
         tmp_list=$(mktemp)
-        find "$test_dir" -mindepth 1 -type d | sort > "$tmp_list"
+        find "$test_dir" -mindepth 1 -type d | sort >"$tmp_list"
         while read -r file_dir; do
-            if ! find "$file_dir" -type f -name "*marks*" | grep -q .;then
+            if ! find "$file_dir" -type f -name "*marks*" | grep -q .; then
                 # echo "$file_dir"
                 continue
             fi
             file_name=$(basename $file_dir)
-                arguments=""
-                stdin=""
-                stdout=""
-                options=""
-                exit_status=0
-                stderr=""
-                marks=0
+            arguments=""
+            stdin=""
+            options=""
+            exit_status=0
+            marks=0
 
-                 result_stdout_file=$(mktemp)
-                result_stderr_file=$(mktemp)
-                expected_stdout_file=$(mktemp)
-                expected_stderr_file=$(mktemp)
+            result_stdout_file=$(mktemp)
+            result_stderr_file=$(mktemp)
+            expected_stdout_file=$(mktemp)
+            expected_stderr_file=$(mktemp)
 
-                if [ -f "./$file_dir/exit_status" ];then
-                    exit_status=$(cat "./$file_dir/exit_status")
+            if [ -f "./$file_dir/exit_status" ]; then
+                exit_status=$(cat "./$file_dir/exit_status")
+            fi
+
+            if [ -f "./$file_dir/arguments" ]; then
+                arguments=$(cat "./$file_dir/arguments")
+                if ! echo "$arguments" | grep -Eq "$arguments_regex"; then
+                    echo "mygive-test: invalid arguments: $arguments" 1>&2
+                    exit "$exit_status"
                 fi
-                
-                if [ -f "./$file_dir/arguments" ];then
-                    arguments=$(cat "./$file_dir/arguments")
-                    if ! echo "$arguments" | grep -Eq "$arguments_regex";then
-                        echo "mygive-test: invalid arguments: $arguments" 1>&2
-                        exit "$exit_status"
-                    fi
-                fi
+            fi
 
-                if [ -f "./$file_dir/stdin" ];then
-                    stdin=$(cat "./$file_dir/stdin")
-                fi
+            if [ -f "./$file_dir/stdin" ]; then
+                stdin=$(cat "./$file_dir/stdin")
+            fi
 
-                if [ -f "./$file_dir/options" ];then
-                    options=$(cat "./$file_dir/options")
-                fi
+            if [ -f "./$file_dir/options" ]; then
+                options=$(cat "./$file_dir/options")
+            fi
 
-                if [ -f "./$file_dir/marks" ];then
-                    marks=$(cat "./$file_dir/marks")
-                fi
+            if [ -f "./$file_dir/marks" ]; then
+                marks=$(cat "./$file_dir/marks")
+            fi
 
-                # echo "arguments: $arguments"
-                # echo "stdin: $stdin"
-                # echo "stdout: $stdout"
-                # echo "stderr: $stderr"
-                # echo "marks: $marks"
+            # echo "arguments: $arguments"
+            # echo "stdin: $stdin"
+            # echo "marks: $marks"
 
-                if [ -z "$stdin" ];then
-                    ./"$program_file" $arguments > "$result_stdout_file" 2> "$result_stderr_file"
-                else
-                    echo "$stdin" | ./"$program_file" $arguments > "$result_stdout_file" 2> "$result_stderr_file"
-                fi
+            if [ -z "$stdin" ]; then
+                ./"$program_file" $arguments >"$result_stdout_file" 2>"$result_stderr_file"
+            else
+                echo "$stdin" | ./"$program_file" $arguments >"$result_stdout_file" 2>"$result_stderr_file"
+            fi
 
-                if [ -f "./$file_dir/stdout" ];then
-                    cp "./$file_dir/stdout" "$expected_stdout_file"
-                else
-                    : > "$expected_stdout_file"
-                fi
-                total_marks=$((total_marks+marks))
+            result_exit_code="$?"
 
-                # echo "result: $result"
+            if [ -f "./$file_dir/stdout" ]; then
+                cp "./$file_dir/stdout" "$expected_stdout_file"
+            else
+                : >"$expected_stdout_file"
+            fi
 
-                tmp_file=$(mktemp)
+            if [ -f "./$file_dir/stderr" ]; then
+                cp "./$file_dir/stderr" "$expected_stderr_file"
+            else
+                : >"$expected_stderr_file"
+            fi
 
-        if echo "$options" | grep -q "b"; then
-            sed -i '' "/^$/d" "$result_stdout_file"
-            sed -i '' "/^$/d" "$expected_stdout_file"
-        fi
+            total_marks=$((total_marks + marks))
 
-        if echo "$options" | grep -q "c"; then
-            tr '[:upper:]' '[:lower:]' < "$result_stdout_file" > "$tmp_file"
-            mv "$tmp_file" "$result_stdout_file"
-            tr '[:upper:]' '[:lower:]' < "$expected_stdout_file" > "$tmp_file"
-            mv "$tmp_file" "$expected_stdout_file"
-        fi
+            tmp_file=$(mktemp)
 
-        if echo "$options" | grep -q "w"; then
-           tr -d ' \t' < "$result_stdout_file" > "$tmp_file"
-            mv "$tmp_file" "$result_stdout_file"
-            tr -d ' \t' < "$expected_stdout_file" > "$tmp_file"
-            mv "$tmp_file" "$expected_stdout_file"
-        fi
+            if echo "$options" | grep -q "b"; then
+                sed -i '' "/^$/d" "$result_stdout_file"
+                sed -i '' "/^$/d" "$expected_stdout_file"
+            fi
 
-        if echo "$options" | grep -q "d"; then
-            sed -i '' 's/[^0-9\n]//g' "$result_stdout_file"
-            sed -i '' 's/[^0-9\n]//g' "$expected_stdout_file"
-        fi
+            if echo "$options" | grep -q "c"; then
+                tr '[:upper:]' '[:lower:]' <"$result_stdout_file" >"$tmp_file"
+                mv "$tmp_file" "$result_stdout_file"
+                tr '[:upper:]' '[:lower:]' <"$expected_stdout_file" >"$tmp_file"
+                mv "$tmp_file" "$expected_stdout_file"
+            fi
+
+            if echo "$options" | grep -q "w"; then
+                tr -d ' \t' <"$result_stdout_file" >"$tmp_file"
+                mv "$tmp_file" "$result_stdout_file"
+                tr -d ' \t' <"$expected_stdout_file" >"$tmp_file"
+                mv "$tmp_file" "$expected_stdout_file"
+            fi
+
+            if echo "$options" | grep -q "d"; then
+                sed -i '' 's/[^0-9\n]//g' "$result_stdout_file"
+                sed -i '' 's/[^0-9\n]//g' "$expected_stdout_file"
+            fi
             #   echo "Expected: "
             #     cat "$expected_stdout_file"
 
             #     echo "Result: "
             #     cat "$result_stdout_file"
 
-                cmp -s "$expected_stdout_file" "$result_stdout_file"
+            cmp -s "$expected_stdout_file" "$result_stdout_file"
 
-                if [ $? -eq 0 ];then
-                    echo "* Test $file_name passed ($marks marks)."
-                    passed_tests=$((passed_tests+1))
-                    curr_marks=$((curr_marks+marks))
-                else
-                    echo "* Test $file_name failed."
-                    failed_tests=$((failed_tests+1))
+            if [ $? -eq 0 ] && diff -q $expected_stderr_file $result_stderr_file >/dev/null && [ "$result_exit_code" -eq "$exit_status" ]; then
+                echo "* Test $file_name passed ($marks marks)."
+                passed_tests=$((passed_tests + 1))
+                curr_marks=$((curr_marks + marks))
+            else
+                echo "* Test $file_name failed."
+                failed_tests=$((failed_tests + 1))
 
-                    result_size=$(stat -f"%z" "$result_stdout_file")
-                    expected_result_size=$(stat -f"%z" "$expected_stdout_file")
+                result_size=$(stat -f"%z" "$result_stdout_file")
+                expected_result_size=$(stat -f"%z" "$expected_stdout_file")
 
-                    result_char_result=$(tail -c 1 "$result_stdout_file")
-                    expected_char_result=$(tail -c 1 "$expected_stdout_file")
-                    #result_size=$(stat -c%s "$result_stdout_file")
-                    #expected_result_size=$(stat -c%zs "./$file_dir/stdin")
+                result_char_result=$(tail -c 1 "$result_stdout_file")
+                expected_char_result=$(tail -c 1 "$expected_stdout_file")
+                #result_size=$(stat -c%s "$result_stdout_file")
+                #expected_result_size=$(stat -c%zs "./$file_dir/stdin")
 
-                    if [ ! -s "$expected_stdout_file" ] && [ -s "$result_stdout_file" ];then
-                        echo "--- No stdout expected, these $result_size bytes produced:"
+                if [ ! -s "$expected_stdout_file" ] && [ -s "$result_stdout_file" ]; then
+                    echo "--- No stdout expected, these $result_size bytes produced:"
+                    cat "$result_stdout_file"
+                    echo ""
+                elif [ ! -s "$result_stdout_file" ] && [ -s "$expected_stdout_file" ]; then
+                    echo "--- No stdout produced, these $expected_result_size bytes expected:"
+                    cat "$expected_stdout_file"
+                    cat "$result_stdout_file"
+                    echo ""
+                elif [ $((result_size - expected_result_size)) -eq 1 ] && [ "$result_char_result" = "" ]; then
+                    new_expected_file=$(mktemp)
+                    cat "$expected_stdout_file" >"$new_expected_file"
+                    printf "\n" >>"$new_expected_file"
+                    if cmp -s "$new_expected_file" "$result_stdout_file"; then
+                        echo "Extra newline at end of stdout"
+                    else
+                        echo "--- Incorrect stdout of $result_size bytes:"
                         cat "$result_stdout_file"
                         echo ""
-                    elif [ ! -s "$result_stdout_file" ] && [ -s "$expected_stdout_file" ];then
+
+                        echo "--- Correct stdout is these $expected_result_size bytes:"
+                        cat "$expected_stdout_file"
+                        echo ""
+                    fi
+                elif [ $((expected_result_size - result_size)) -eq 1 ] && [ "$expected_char_result" = "" ]; then
+                    new_result_file=$(mktemp)
+                    cat "$result_stdout_file" >"$new_result_file"
+                    printf "\n" >>"$new_result_file"
+                    if cmp -s "$new_result_file" "$expected_stdout_file"; then
+                        echo "Missing newline at end of stdout"
+                    else
+                        echo "--- Incorrect stdout of $result_size bytes:"
+                        cat "$result_stdout_file"
+                        echo ""
+
+                        echo "--- Correct stdout is these $expected_result_size bytes:"
+                        cat "$expected_stdout_file"
+                        echo ""
+                    fi
+                else
+                    echo "--- Incorrect stdout of $result_size bytes:"
+                    cat "$result_stdout_file"
+                    echo ""
+
+                    echo "--- Correct stdout is these $expected_result_size bytes:"
+                    cat "$expected_stdout_file"
+                    echo ""
+                fi
+
+                result_stderr_size=$(stat -f"%z" "$result_stderr_file")
+                expected_stderr_size=$(stat -f"%z" "$expected_stderr_file")
+
+                result_errchar_result=$(tail -c 1 "$result_stderr_file")
+                expected_errchar_result=$(tail -c 1 "$expected_stderr_file")
+                #result_size=$(stat -c%s "$result_stdout_file")
+                #expected_result_size=$(stat -c%zs "./$file_dir/stdin")
+                if diff -q $expected_stderr_file $result_stderr_file >/dev/null; then
+                    :
+                else
+                    if [ ! -s "$expected_stderr_file" ] && [ -s "$result_stderr_file" ]; then
+                        echo "--- No stdout expected, these $result_stderr_size bytes produced:"
+                        cat "$result_stdout_file"
+                        echo ""
+                    elif [ ! -s "$result_stdout_file" ] && [ -s "$expected_stdout_file" ]; then
                         echo "--- No stdout produced, these $expected_result_size bytes expected:"
                         cat "$expected_stdout_file"
-                        cat "$result_stdout_file"
                         echo ""
-                    elif [ $(($result_size - $expected_result_size)) -eq 1 ] && [ "$result_char_result" = "" ];then
+                    elif [ $((result_stderr_size - expected_stderr_size)) -eq 1 ] && [ "$result_errchar_result" = "" ]; then
                         new_expected_file=$(mktemp)
-                        cat "$expected_stdout_file" > "$new_expected_file"
-                        printf "\n" >> "$new_expected_file"
-                        if cmp -s "$new_expected_file" "$result_stdout_file";then
-                            echo "Extra newline at end of stdout"
+                        cat "$expected_stderr_file" >"$new_expected_file"
+                        printf "\n" >>"$new_expected_file"
+                        if cmp -s "$new_expected_file" "$result_stderr_file"; then
+                            echo "Extra newline at end of stderr"
                         else
-                            echo "--- Incorrect stdout of $result_size bytes:"
-                            cat "$result_stdout_file"
+                            echo "--- Incorrect stderr of $result_stderr_size bytes:"
+                            cat "$result_stderr_file"
                             echo ""
-                            
-                            echo "--- Correct stdout is these $expected_result_size bytes:"
-                            cat "$expected_stdout_file"
+
+                            echo "--- Correct stderr is these $expected_stderr_size bytes:"
+                            cat "$expected_stderr_file"
                             echo ""
                         fi
-                    elif [ $(($expected_result_size - $result_size)) -eq 1 ] && [ "$expected_char_result" = "" ];then
+                    elif [ $((expected_stderr_size - result_stderr_size)) -eq 1 ] && [ "$expected_errchar_result" = "" ]; then
                         new_result_file=$(mktemp)
-                        cat "$result_stdout_file" > "$new_result_file"
-                        printf "\n" >> "$new_result_file"
-                        if cmp -s "$new_result_file" "$expected_stdout_file";then
-                            echo "Missing newline at end of stdout"
+                        cat "$result_stderr_file" >"$new_result_file"
+                        printf "\n" >>"$new_result_file"
+                        if cmp -s "$new_result_file" "$expected_stderr_file"; then
+                            echo "Missing newline at end of stderr"
                         else
-                            echo "--- Incorrect stdout of $result_size bytes:"
-                            cat "$result_stdout_file"
+                            echo "--- Incorrect stderr of $result_stderr_size bytes:"
+                            cat "$result_stderr_file"
                             echo ""
-                            
-                            echo "--- Correct stdout is these $expected_result_size bytes:"
-                            cat "$expected_stdout_file"
+
+                            echo "--- Correct stderr is these $expected_stderr_size bytes:"
+                            cat "$expected_stderr_file"
                             echo ""
                         fi
-                     else
-                            echo "--- Incorrect stdout of $result_size bytes:"
-                            cat "$result_stdout_file"
-                            echo ""
-                            
-                            echo "--- Correct stdout is these $expected_result_size bytes:"
-                            cat "$expected_stdout_file"
-                            echo ""
+                    else
+                        echo "--- Incorrect stderr of $result_stderr_size bytes:"
+                        cat "$result_stderr_file"
+                        echo ""
+
+                        echo "--- Correct stderr is these $expected_result_size bytes:"
+                        cat "$expected_stderr_file"
+                        echo ""
                     fi
                 fi
-        done < "$tmp_list"
+
+                if [ "$result_exit_code" -ne "$exit_status" ]; then
+                    echo "Exit status of $result_exit_code incorrect should be $exit_status"
+                fi
+            fi
+        done <"$tmp_list"
         #    rm -rf "$test_dir"
     done
     echo "** $passed_tests tests passed, $failed_tests tests failed - mark: $curr_marks/$total_marks"
-done < "$tmp_l"
-
-
-
+done <"$tmp_l"
