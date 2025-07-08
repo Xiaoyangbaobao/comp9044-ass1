@@ -41,8 +41,8 @@ while read -r zid; do
     file_size=$(stat -f"%z" "$zid_dir/$submission/$file_name")
     echo "*** Student $zid - submission $submission: $file_name $file_size bytes @ $submission_time"
 
-    for test_file in "$base_dir/tests/*"; do
-        test_dir=$(basename "$test_file" | cut -d'.' -f1)
+    for test_file in $base_dir/tests/*; do
+        test_dir=$(basename $test_file | cut -d'.' -f1)
         mkdir -p "$test_dir"
         tar -xzf "$test_file" -C "$test_dir"
 
