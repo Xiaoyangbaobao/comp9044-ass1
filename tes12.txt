@@ -1,0 +1,599 @@
+bash -n mygive-* *.sh # mygive-add
+check_hashbang.sh mygive-* # mygive-add
+check_features_used.sh mygive-* # mygive-add
+shellcheck -x -a -P='.' --shell=dash  -e2010,2011,2012,2038 mygive-*; true # mygive-add
+
+In mygive-mark line 32:
+    zid=$(basename $zid)
+                   ^--^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+    zid=$(basename "$zid")
+
+
+In mygive-mark line 43:
+    for test_file in $base_dir/tests/*; do
+                     ^-------^ SC2231 (info): Quote expansions in this for loop glob to prevent wordsplitting, e.g. "$dir"/*.txt .
+
+
+In mygive-mark line 44:
+        test_dir=$(basename $test_file | cut -d'.' -f1)
+                            ^--------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+        test_dir=$(basename "$test_file" | cut -d'.' -f1)
+
+
+In mygive-mark line 55:
+            file_name=$(basename $file_dir)
+                                 ^-------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+            file_name=$(basename "$file_dir")
+
+
+In mygive-mark line 58:
+                stdout=""
+                ^----^ SC2034 (warning): stdout appears unused. Verify use (or export if used externally).
+
+
+In mygive-mark line 61:
+                stderr=""
+                ^----^ SC2034 (warning): stderr appears unused. Verify use (or export if used externally).
+
+
+In mygive-mark line 67:
+                expected_stderr_file=$(mktemp)
+                ^------------------^ SC2034 (warning): expected_stderr_file appears unused. Verify use (or export if used externally).
+
+
+In mygive-mark line 75:
+                    if ! echo "$arguments" | grep -Eq "$arguments_regex";then
+                                                       ^--------------^ SC2154 (warning): arguments_regex is referenced but not assigned.
+
+
+In mygive-mark line 100:
+                    ./"$program_file" $arguments > "$result_stdout_file" 2> "$result_stderr_file"
+                                      ^--------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+                    ./"$program_file" "$arguments" > "$result_stdout_file" 2> "$result_stderr_file"
+
+
+In mygive-mark line 102:
+                    echo "$stdin" | ./"$program_file" $arguments > "$result_stdout_file" 2> "$result_stderr_file"
+                                                      ^--------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+                    echo "$stdin" | ./"$program_file" "$arguments" > "$result_stdout_file" 2> "$result_stderr_file"
+
+
+In mygive-mark line 140:
+                if [ $? -eq 0 ];then
+                     ^-- SC2181 (style): Check exit code directly with e.g. 'if mycmd;', not indirectly with $?.
+
+
+In mygive-mark line 164:
+                    elif [ $(($result_size - $expected_result_size)) -eq 1 ] && [ "$result_char_result" = "" ];then
+                              ^----------^ SC2004 (style): $/${} is unnecessary on arithmetic variables.
+                                             ^-------------------^ SC2004 (style): $/${} is unnecessary on arithmetic variables.
+
+
+In mygive-mark line 179:
+                    elif [ $(($expected_result_size - $result_size)) -eq 1 ] && [ "$expected_char_result" = "" ];then
+                              ^-------------------^ SC2004 (style): $/${} is unnecessary on arithmetic variables.
+                                                      ^----------^ SC2004 (style): $/${} is unnecessary on arithmetic variables.
+
+
+In mygive-status line 13:
+        ass_name=$(basename $ass)
+                            ^--^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+        ass_name=$(basename "$ass")
+
+
+In mygive-status line 18:
+                submission_num=$(basename $submission)
+                                          ^---------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+                submission_num=$(basename "$submission")
+
+
+In mygive-submit line 50:
+    cp "$file_name" .mygive/"$ass_name"/"$zid"/"1"  && date "+%a %b %e %T %Y" > ".mygive/""$ass_name""/""$zid""/"1"/.timestamp"
+                                                                                                                 ^-- SC2140 (warning): Word is of the form "A"B"C" (B indicated). Did you mean "ABC" or "A\"B\"C"?
+
+
+In mygive-test line 32:
+for test_file in .mygive/$ass_name/tests/*; do
+                         ^-------^ SC2231 (info): Quote expansions in this for loop glob to prevent wordsplitting, e.g. "$dir"/*.txt .
+
+
+In mygive-test line 33:
+   test_dir=$(basename $test_file | cut -d'.' -f1)
+                       ^--------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+   test_dir=$(basename "$test_file" | cut -d'.' -f1)
+
+
+In mygive-test line 45:
+        file_name=$(basename $file_dir)
+                             ^-------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+        file_name=$(basename "$file_dir")
+
+
+In mygive-test line 48:
+        stdout=""
+        ^----^ SC2034 (warning): stdout appears unused. Verify use (or export if used externally).
+
+
+In mygive-test line 51:
+        stderr=""
+        ^----^ SC2034 (warning): stderr appears unused. Verify use (or export if used externally).
+
+
+In mygive-test line 56:
+        expected_stderr_file=$(mktemp)
+        ^------------------^ SC2034 (warning): expected_stderr_file appears unused. Verify use (or export if used externally).
+
+
+In mygive-test line 84:
+            ./"$program_file" $arguments > "$result_stdout_file" 2> "$result_stderr_file"
+                              ^--------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+            ./"$program_file" "$arguments" > "$result_stdout_file" 2> "$result_stderr_file"
+
+
+In mygive-test line 86:
+            echo "$stdin" | ./"$program_file" $arguments > "$result_stdout_file" 2> "$result_stderr_file"
+                                              ^--------^ SC2086 (info): Double quote to prevent globbing and word splitting.
+
+Did you mean: 
+            echo "$stdin" | ./"$program_file" "$arguments" > "$result_stdout_file" 2> "$result_stderr_file"
+
+
+In mygive-test line 122:
+        if [ $? -eq 0 ];then
+             ^-- SC2181 (style): Check exit code directly with e.g. 'if mycmd;', not indirectly with $?.
+
+
+In mygive-test line 145:
+            elif [ $(($result_size - $expected_result_size)) -eq 1 ] && [ "$result_char_result" = "" ];then
+                      ^----------^ SC2004 (style): $/${} is unnecessary on arithmetic variables.
+                                     ^-------------------^ SC2004 (style): $/${} is unnecessary on arithmetic variables.
+
+
+In mygive-test line 160:
+            elif [ $(($expected_result_size - $result_size)) -eq 1 ] && [ "$expected_char_result" = "" ];then
+                      ^-------------------^ SC2004 (style): $/${} is unnecessary on arithmetic variables.
+                                              ^----------^ SC2004 (style): $/${} is unnecessary on arithmetic variables.
+
+For more information:
+  https://www.shellcheck.net/wiki/SC2034 -- expected_stderr_file appears unus...
+  https://www.shellcheck.net/wiki/SC2140 -- Word is of the form "A"B"C" (B in...
+  https://www.shellcheck.net/wiki/SC2154 -- arguments_regex is referenced but...
+Test 1_add (add: 1 assignment) - passed
+Test 2_add (add: existing assignment) - passed
+Test 3_add (add: incorrect number of arguments) - passed
+Test 4_add (add: stdout if tests file doesn't exist) - passed
+Test 5_add (add: stderr if tests file doesn't exist) - passed
+Test 6_add (add: invalid name) - passed
+Test 7_summary (summary: 1 assignment) - passed
+Test 8_submit (submit) - passed
+Test 9_submit (submit: error handling) - passed
+Test 10_status (status 1 assignment) - passed
+Test 11_fetch (fetch) - passed
+Test 12_fetch (fetch - no submission number) - passed
+Test 13_fetch (fetch - negative submission number) - passed
+Test 14_fetch (fetch error) - passed
+Test 15_test (test) - passed
+Test 16_test (test: argument error handling) - passed
+Test 17_mark (mark 1 assignment) - passed
+Test 18_summary (rm) - passed
+Test 19_summary (add,rm,add) - passed
+Test 20_mark (test newline handling) - passed
+Test 21_mark (test option handling) - passed
+Test 22_mark (test stdin & argument handling handling) - passed
+Test 23_test (test incorrect stderr & incorrect exit) - failed (Incorrect output)
+Your program produced these 26 lines of output:
+directory .mygive created
+assignment project created
+* Test test1 passed.
+* Test test2 failed.
+--- Incorrect stdout of 2 bytes:
+2
+
+--- Correct stdout is these 2 bytes:
+1
+
+* Test test3 failed.
+--- Incorrect stdout of 2 bytes:
+4
+
+--- Correct stdout is these 2 bytes:
+5
+
+* Test test4 failed.
+--- Incorrect stdout of 2 bytes:
+5
+
+--- Correct stdout is these 2 bytes:
+4
+
+* Test test5 passed.
+** 2 tests passed, 3 tests failed
+
+The correct 47 lines of output for this test were:
+directory .mygive created
+assignment project created
+* Test test1 passed.
+* Test test2 failed.
+--- Incorrect stdout of 2 bytes:
+2
+
+--- Correct stdout is these 2 bytes:
+1
+
+--- Incorrect stderr of 2 bytes:
+3
+
+--- Correct stderr is these 2 bytes:
+2
+
+Exit status of 1 incorrect should be 3
+* Test test3 failed.
+--- Incorrect stdout of 2 bytes:
+4
+
+--- Correct stdout is these 2 bytes:
+5
+
+Exit status of 5 incorrect should be 4
+* Test test4 failed.
+--- Incorrect stdout of 2 bytes:
+5
+
+--- Correct stdout is these 2 bytes:
+4
+
+--- Incorrect stderr of 2 bytes:
+4
+
+--- Correct stderr is these 2 bytes:
+5
+
+* Test test5 failed.
+--- Incorrect stderr of 2 bytes:
+5
+
+--- Correct stderr is these 2 bytes:
+4
+
+Exit status of 4 incorrect should be 5
+** 1 tests passed, 4 tests failed
+
+The difference between your output(-) and the correct output(+) is:
+...
++ --- Incorrect stderr of 2 bytes:
++ 3
++ 
++ --- Correct stderr is these 2 bytes:
++ 2
++ 
++ Exit status of 1 incorrect should be 3
+  * Test test3 failed.
+  
++ Exit status of 5 incorrect should be 4
+  * Test test4 failed.
+  
++ --- Incorrect stderr of 2 bytes:
++ 4
++ 
++ --- Correct stderr is these 2 bytes:
++ 5
++ 
+- * Test test5 passed.
+?              ^ ^^
+
++ * Test test5 failed.
+?              ^ ^^
+
++ --- Incorrect stderr of 2 bytes:
++ 5
++ 
++ --- Correct stderr is these 2 bytes:
++ 4
++ 
++ Exit status of 4 incorrect should be 5
+- ** 2 tests passed, 3 tests failed
+?    ^               ^
+
++ ** 1 tests passed, 4 tests failed
+?    ^               ^
+
+You can reproduce this test by executing these commands:
+  rm -rf .mygive
+  mygive-add project stderr.tests
+mygive-test project stderr_wrong.sh
+Test 24_test (test incorrect stderr with no new line + incorrect exit) - failed (Incorrect output)
+Your program produced these 13 lines of output:
+directory .mygive created
+assignment project created
+* Test test1 failed.
+Missing newline at end of stdout
+* Test test2 failed.
+Missing newline at end of stdout
+* Test test3 failed.
+Missing newline at end of stdout
+* Test test4 failed.
+Missing newline at end of stdout
+* Test test5 failed.
+Missing newline at end of stdout
+** 0 tests passed, 5 tests failed
+
+The correct 23 lines of output for this test were:
+directory .mygive created
+assignment project created
+* Test test1 failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 3
+* Test test2 failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 3
+* Test test3 failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 4
+* Test test4 failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 4
+* Test test5 failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 5
+** 0 tests passed, 5 tests failed
+
+The difference between your output(-) and the correct output(+) is:
+...
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 3
+  * Test test2 failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 3
+  * Test test3 failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 4
+  * Test test4 failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 4
+  * Test test5 failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 5
+  ** 0 tests passed, 5 tests failed
+You can reproduce this test by executing these commands:
+  rm -rf .mygive
+  mygive-add project stderr.tests
+mygive-test project stderr_no_newline.sh
+Test 25_mark (test incorrect stderr & incorrect exit) - failed (Incorrect output)
+Your program produced these 53 lines of output:
+directory .mygive created
+assignment project created
+Submission accepted - submission 1: stderr_wrong.sh 47 bytes @ Wed Feb 23 09:39:04 2005
+Submission accepted - submission 1: stderr.sh 48 bytes @ Wed Feb 23 09:40:41 2005
+Submission accepted - submission 1: stderr.sh 48 bytes @ Wed Feb 23 09:42:20 2005
+Submission accepted - submission 2: stderr_wrong.sh 47 bytes @ Wed Feb 23 09:44:17 2005
+Submission accepted - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:45:46 2005
+Submission accepted - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:46:05 2005
+Submission accepted - submission 3: stderr_no_newline.sh 50 bytes @ Wed Feb 23 09:46:41 2005
+*** Student z5555555 - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:45:46 2005
+* Test test1_marking passed (8 marks).
+* Test test2_marking passed (7 marks).
+* Test test3_marking passed (5 marks).
+* Test test4_marking passed (13 marks).
+* Test test5_marking passed (19 marks).
+** 5 tests passed, 0 tests failed - mark: 52/52
+*** Student z6666666 - submission 2: stderr_wrong.sh 47 bytes @ Wed Feb 23 09:44:17 2005
+* Test test1_marking passed (8 marks).
+* Test test2_marking failed.
+--- Incorrect stdout of 2 bytes:
+2
+
+--- Correct stdout is these 2 bytes:
+1
+
+* Test test3_marking failed.
+--- Incorrect stdout of 2 bytes:
+4
+
+--- Correct stdout is these 2 bytes:
+5
+
+* Test test4_marking failed.
+--- Incorrect stdout of 2 bytes:
+5
+
+--- Correct stdout is these 2 bytes:
+4
+
+* Test test5_marking passed (19 marks).
+** 2 tests passed, 3 tests failed - mark: 27/52
+*** Student z7777777 - submission 3: stderr_no_newline.sh 50 bytes @ Wed Feb 23 09:46:41 2005
+* Test test1_marking failed.
+Missing newline at end of stdout
+* Test test2_marking failed.
+Missing newline at end of stdout
+* Test test3_marking failed.
+Missing newline at end of stdout
+* Test test4_marking failed.
+Missing newline at end of stdout
+* Test test5_marking failed.
+Missing newline at end of stdout
+** 0 tests passed, 5 tests failed - mark: 0/52
+
+The correct 84 lines of output for this test were:
+directory .mygive created
+assignment project created
+Submission accepted - submission 1: stderr_wrong.sh 47 bytes @ Wed Feb 23 09:39:04 2005
+Submission accepted - submission 1: stderr.sh 48 bytes @ Wed Feb 23 09:40:41 2005
+Submission accepted - submission 1: stderr.sh 48 bytes @ Wed Feb 23 09:42:20 2005
+Submission accepted - submission 2: stderr_wrong.sh 47 bytes @ Wed Feb 23 09:44:17 2005
+Submission accepted - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:45:46 2005
+Submission accepted - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:46:05 2005
+Submission accepted - submission 3: stderr_no_newline.sh 50 bytes @ Wed Feb 23 09:46:41 2005
+*** Student z5555555 - submission 2: stderr.sh 48 bytes @ Wed Feb 23 09:45:46 2005
+* Test test1_marking passed (8 marks).
+* Test test2_marking passed (7 marks).
+* Test test3_marking passed (5 marks).
+* Test test4_marking passed (13 marks).
+* Test test5_marking passed (19 marks).
+** 5 tests passed, 0 tests failed - mark: 52/52
+*** Student z6666666 - submission 2: stderr_wrong.sh 47 bytes @ Wed Feb 23 09:44:17 2005
+* Test test1_marking passed (8 marks).
+* Test test2_marking failed.
+--- Incorrect stdout of 2 bytes:
+2
+
+--- Correct stdout is these 2 bytes:
+1
+
+--- Incorrect stderr of 2 bytes:
+3
+
+--- Correct stderr is these 2 bytes:
+2
+
+Exit status of 1 incorrect should be 3
+* Test test3_marking failed.
+--- Incorrect stdout of 2 bytes:
+4
+
+--- Correct stdout is these 2 bytes:
+5
+
+Exit status of 5 incorrect should be 4
+* Test test4_marking failed.
+--- Incorrect stdout of 2 bytes:
+5
+
+--- Correct stdout is these 2 bytes:
+4
+
+--- Incorrect stderr of 2 bytes:
+4
+
+--- Correct stderr is these 2 bytes:
+5
+
+* Test test5_marking failed.
+--- Incorrect stderr of 2 bytes:
+5
+
+--- Correct stderr is these 2 bytes:
+4
+
+Exit status of 4 incorrect should be 5
+** 1 tests passed, 4 tests failed - mark: 8/52
+*** Student z7777777 - submission 3: stderr_no_newline.sh 50 bytes @ Wed Feb 23 09:46:41 2005
+* Test test1_marking failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 3
+* Test test2_marking failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 3
+* Test test3_marking failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 4
+* Test test4_marking failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 4
+* Test test5_marking failed.
+Missing newline at end of stdout
+Missing newline at end of stderr
+Exit status of 0 incorrect should be 5
+** 0 tests passed, 5 tests failed - mark: 0/52
+
+The difference between your output(-) and the correct output(+) is:
+...
++ --- Incorrect stderr of 2 bytes:
++ 3
++ 
++ --- Correct stderr is these 2 bytes:
++ 2
++ 
++ Exit status of 1 incorrect should be 3
+  * Test test3_marking failed.
+  
++ Exit status of 5 incorrect should be 4
+  * Test test4_marking failed.
+  
+- * Test test5_marking passed (19 marks).
++ --- Incorrect stderr of 2 bytes:
++ 4
++ 
++ --- Correct stderr is these 2 bytes:
++ 5
++ 
++ * Test test5_marking failed.
++ --- Incorrect stderr of 2 bytes:
++ 5
++ 
++ --- Correct stderr is these 2 bytes:
++ 4
++ 
++ Exit status of 4 incorrect should be 5
+- ** 2 tests passed, 3 tests failed - mark: 27/52
+?    ^               ^                      ^^
+
++ ** 1 tests passed, 4 tests failed - mark: 8/52
+?    ^               ^                      ^
+
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 3
+  * Test test2_marking failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 3
+  * Test test3_marking failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 4
+  * Test test4_marking failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 4
+  * Test test5_marking failed.
+  Missing newline at end of stdout
++ Missing newline at end of stderr
++ Exit status of 0 incorrect should be 5
+  ** 0 tests passed, 5 tests failed - mark: 0/52
+You can reproduce this test by executing these commands:
+  rm -rf .mygive
+  mygive-add project stderr.tests
+FAKETIME="2005-02-23 09:39:04" mygive-submit project z5555555 stderr_wrong.sh
+FAKETIME="2005-02-23 09:40:41" mygive-submit project z6666666 stderr.sh
+FAKETIME="2005-02-23 09:42:20" mygive-submit project z7777777 stderr.sh
+FAKETIME="2005-02-23 09:44:17" mygive-submit project z6666666 stderr_wrong.sh
+FAKETIME="2005-02-23 09:45:46" mygive-submit project z5555555 stderr.sh
+FAKETIME="2005-02-23 09:46:05" mygive-submit project z7777777 stderr.sh
+FAKETIME="2005-02-23 09:46:41" mygive-submit project z7777777 stderr_no_newline.sh
+FAKETIME="2005-02-23 09:48:22" mygive-mark project
+22 tests passed 3 tests failed
