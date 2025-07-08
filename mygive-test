@@ -73,8 +73,8 @@ for test_file in .mygive/$ass_name/tests/*; do
             options=$(cat "./$file_dir/options")
         fi
 
-        echo "arguments: $arguments"
-        echo "stdin: $stdin"
+        # echo "arguments: $arguments"
+        # echo "stdin: $stdin"
 
         if [ -z "$stdin" ]; then
             ./"$program_file" $arguments >"$result_stdout_file" 2>"$result_stderr_file"
@@ -252,7 +252,7 @@ for test_file in .mygive/$ass_name/tests/*; do
             fi
         fi
     done <"$tmp_list"
-    #    rm -rf "$test_dir"
+    rm -rf "$test_dir"
 done
 
 echo "** $passed_tests tests passed, $failed_tests tests failed"
