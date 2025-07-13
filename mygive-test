@@ -256,7 +256,7 @@ for test_file in .mygive/$ass_name/tests/*; do
             fi
         fi
     done <"$tmp_list"
-    #    rm -rf "$test_dir"
+    rm -rf "$test_dir" "$result_stdout_file" "$result_stderr_file" "$expected_stdout_file" "$expected_stderr_file" 2>/dev/null
 done
 
 echo "** $passed_tests tests passed, $failed_tests tests failed"
