@@ -232,9 +232,253 @@ const Dashboard = () => {
   );
 };
 
-// Placeholder components for other routes
-const Blanko = () => <div style={{padding: '20px'}}><h1>Blanko Game Page</h1></div>;
-const Slido = () => <div style={{padding: '20px'}}><h1>Slido Game Page</h1></div>;
+// Placeholder components for other routesconst Blanko = () => {
+  const [currentString, setCurrentString] = useState("");
+  const [missingIndices, setMissingIndices] = useState([]);
+  const [inputs, setInputs] = useState({});
+
+  // Initialize Game
+  const initGame = useCallback(() => {
+    // Pick random string
+    const randomStr = BLANKO_STRINGS[Math.floor(Math.random() * BLANKO_STRINGS.length)];
+    setCurrentString(randomStr);
+
+    // Pick 3 random indices that are NOT spaces
+    const indices = [];
+    const validIndices = [];
+    for (let i = 0; i < randomStr.length; i++) {
+        if (randomStr[i] !== ' ') validIndices.push(i);
+    }
+
+    while (indices.length < 3) {
+        const randIndex = validIndices[Math.floor(Math.random() * validIndices.length)];
+        if (!indices.includes(randIndex)) {
+            indices.push(randIndex);
+        }
+    }
+    setMissingIndices(indices);
+    setInputs({});
+  }, []);
+
+  useEffect(() => {
+    initGame();
+  }, [initGame]);
+
+  const handleInputChange = (index, value) => {
+    // Only allow single char
+    if (value.length > 1) return;
+
+    const newInputs = { ...inputs, [index]: value };
+    setInputs(newInputs);
+
+    // Check if we have 3 inputs
+    if (Object.keys(newInputs).length === 3) {
+        // Check correctness
+        let correct = true;
+        for (const idx of missingIndices) {
+            // Case sensitive check? Prompt says "entered values are correct", usually implies exact match or case-insensitive.
+            // Let's assume Case Insensitive for better UX, or Exact if strict.
+            // Given "strings defined below" usually implies exact values. I'll do exact.
+            if (!newInputs[idx] || newInputs[idx] !== currentString[idx]) {
+                correct = false;
+                break;
+            }
+        }
+
+        if (correct) {
+            setTimeout(() => {
+                alert("Correct!");
+                const currentWins = parseInt(localStorage.getItem('gamesWon') || '0', 10);
+                localStorage.setItem('gamesWon', (currentWins + 1).toString());
+                initGame();
+            }, 50);
+        }
+    }
+  };
+
+  return (
+    <div className="blanko-container">
+        <div className="blanko-row">
+            {/* Generate 12 boxes. If string is shorter, we pad? Prompt says "7 strings defined below" and "display 12 square containers". 
+                I assumed strings are 12 chars. If string is somehow null (initial render), display placeholders. */}
+            {Array.from({ length: 12 }).map((_, i) => {
+                const char = currentString[i] || "";
+                const isMissing = missingIndices.includes(i);
+
+                return (
+                    <div key={i} className="blanko-box">
+                        {isMissing ? (
+                            <input 
+                                className="blanko-input"
+                                value={inputs[i] || ""}
+                                onChange={(e) => handleInputChange(i, e.target.value)}
+                                maxLength={1}
+                            />
+                        ) : (
+                            char
+                        )}
+                    </div>
+                );
+            })}
+        </div>
+        <button className="blanko-reset-btn" onClick={initGame}>
+            Reset Game
+        </button>
+    </div>
+  );
+};
+const Slido = () => {
+  const [board, setBoard] = useState([...SOLVED_STATE]);
+  const [hasMoved, setHasMoved] = useState(false);
+  const [isGameWon, setIsGameWon] = useState(false);
+
+  const isSolvable = (arr) => {
+    const flatten = arr.filter(x => x !== null);
+    let inversions = 0;
+    for (let i = 0; i < flatten.length; i++) {
+      for (let j = i + 1; j < flatten.length; j++) {
+        if (flatten[i] > flatten[j]) inversions++;
+      }
+    }
+    return inversions % 2 === 0;
+  };
+
+  const shuffleBoard = () => {
+    let newBoard;
+    do {
+      newBoard = [1, 2, 3, 4, 5, 6, 7, 8, null];
+      for (let i = newBoard.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newBoard[i], newBoard[j]] = [newBoard[j], newBoard[i]];
+      }
+    } while (!isSolvable(newBoard) || JSON.stringify(newBoard) === JSON.stringify(SOLVED_STATE));
+    
+    setBoard(newBoard);
+    setHasMoved(false);
+    setIsGameWon(false);
+  };
+
+  useEffect(() => {
+    shuffleBoard();
+  }, []);
+
+  const handleWin = () => {
+    setTimeout(() => {
+      alert("Correct!");
+      const currentWins = parseInt(localStorage.getItem('gamesWon') || '0', 10);
+      localStorage.setItem('gamesWon', (currentWins + 1).toString());
+      shuffleBoard();
+    }, 50);
+  };
+
+  const moveTile = useCallback((index) => {
+    setBoard(prevBoard => {
+      const blankIndex = prevBoard.indexOf(null);
+      const emptyRow = Math.floor(blankIndex / 3);
+      const emptyCol = blankIndex % 3;
+      const targetRow = Math.floor(index / 3);
+      const targetCol = index % 3;
+
+      const isAdjacent = (
+        (Math.abs(emptyRow - targetRow) === 1 && emptyCol === targetCol) ||
+        (Math.abs(emptyCol - targetCol) === 1 && emptyRow === targetRow)
+      );
+
+      if (isAdjacent) {
+        const newBoard = [...prevBoard];
+        newBoard[blankIndex] = newBoard[index];
+        newBoard[index] = null;
+        setHasMoved(true);
+        if (JSON.stringify(newBoard) === JSON.stringify(SOLVED_STATE)) {
+            setIsGameWon(true);
+            handleWin();
+        }
+        return newBoard;
+      }
+      return prevBoard;
+    });
+  }, []);
+
+  const handleContainerClick = (e) => {
+      e.currentTarget.focus();
+  };
+  
+  const handleSolve = () => {
+    setBoard([...SOLVED_STATE]);
+    setIsGameWon(true);
+  };
+
+  return (
+    <div 
+        className="slido-container" 
+        tabIndex="0" 
+        onClick={handleContainerClick}
+        onKeyDown={(e) => {
+             if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                e.preventDefault();
+                setBoard(prevBoard => {
+                    if (JSON.stringify(prevBoard) === JSON.stringify(SOLVED_STATE)) return prevBoard;
+                    const blankIndex = prevBoard.indexOf(null);
+                    const emptyRow = Math.floor(blankIndex / 3);
+                    const emptyCol = blankIndex % 3;
+                    let targetIndex = -1;
+                    if (e.key === 'ArrowDown') { if (emptyRow > 0) targetIndex = blankIndex - 3; }
+                    else if (e.key === 'ArrowUp') { if (emptyRow < 2) targetIndex = blankIndex + 3; }
+                    else if (e.key === 'ArrowRight') { if (emptyCol > 0) targetIndex = blankIndex - 1; }
+                    else if (e.key === 'ArrowLeft') { if (emptyCol < 2) targetIndex = blankIndex + 1; }
+
+                    if (targetIndex !== -1) {
+                        const newBoard = [...prevBoard];
+                        newBoard[blankIndex] = newBoard[targetIndex];
+                        newBoard[targetIndex] = null;
+                        setHasMoved(true);
+                        if (JSON.stringify(newBoard) === JSON.stringify(SOLVED_STATE)) {
+                            setIsGameWon(true);
+                            handleWin();
+                        }
+                        return newBoard;
+                    }
+                    return prevBoard;
+                });
+            }
+        }}
+    >
+      <div className="grid-container">
+        {board.map((tile, index) => (
+          <div 
+            key={index} 
+            className={`grid-cell ${tile === null ? 'empty' : ''}`}
+            onClick={() => tile !== null && moveTile(index)}
+          >
+            {tile !== null && (
+                <div className="tile-content">
+                    Shrek {tile}
+                </div>
+            )}
+          </div>
+        ))}
+      </div>
+      <div className="controls">
+        <button 
+            className="control-btn" 
+            onClick={handleSolve} 
+            disabled={isGameWon} 
+            style={{ float: 'left' }}
+        >
+            Solve
+        </button>
+        <button 
+            className="control-btn" 
+            onClick={shuffleBoard}
+            disabled={!hasMoved && !isGameWon} 
+             style={{ float: 'right' }}
+        >
+            Reset
+        </button>
+      </div>
+    </div>
+  );
+};
 const Tetro = () => <div style={{padding: '20px'}}><h1>Tetro Game Page</h1></div>;
 
 // --- Main App Component ---
